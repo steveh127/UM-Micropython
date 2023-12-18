@@ -126,6 +126,8 @@ class Bling(NeoPixel):
 		self.colour=self.GREEN()
 		
 		self.lines=[0,40,80,120,160,200,240,280]
+		self.speed=0.2
+
 
 	def col(self,n,colour=None):
 		if colour is None:
@@ -157,14 +159,13 @@ class Bling(NeoPixel):
 		self.write()
 		return width
 	
-	def show_text(self,text,colour=None,justify='C'):
+	def show_text(self,text,colour=None,justify='C',scrolling=False):
 		lt = 0
 		for c in text:
 			lt += len(self.chars[c][0]) + 1
 		lt -= 1
-		if lt > 38:
-			#scroll or cut
-			self.show_text('TTTTTT')
+		if lt > 38 or scrolling:
+			self.scroll(text,colour)
 			return
 		if justify == 'C' or justify == 'R':
 			if justify == 'C':
@@ -177,15 +178,39 @@ class Bling(NeoPixel):
 			colour=self.colour
 		for ch in text:
 			column += self.show_char(ch,column,colour) + 1
+	
+	def scroll(self,text,colour=None,speed=None):
+		rows=['','','','','','','']
+		for c in text:
+			char = self.chars[c]
+			for i in range(6):
+				rows[i] += char[i] + '0'
+			if len(char)==7:
+				rows[6] += char[6] + '0'
+			else:
+				rows[6] += len(char[0])*'0' + '0'
+		if colour is None:
+			colour=self.colour
+		if speed is None:
+			speed=self.speed
+		while True:	
+			for start in range(-40,len(rows[0])):
+				self.fill(self.background)					
+				for i in range(7):
+					for col in range (0,38):
+						if (col+start) < len(rows[0]) and (col+start) > -1:
+							if rows[i][col + start] == '1':
+								self[self.lines[i+1] + col + 1]=colour
+				self.write()
+				sleep(speed)
+			sleep(0.2)
 		
 d=Bling()
 
-d.background=(d.BLUE(1))
+d.background=(d.GREEN(1))
 d.fill(d.background)
-d.show_text('4<7>2',colour=d.GREEN())
-sleep(10)
-d.power.off()
+d.scroll('Yes please - go quietly',colour=d.PURPLE())
 
-	
+
 
 	
