@@ -18,7 +18,7 @@ class Colour():
 		return colour
                     
 class Bling(NeoPixel):
-	chars={
+	chars = {
 	' ':('0','0','0','0','0','0'),
 	'.':('0','0','0','0','0','1'),
 	'!':('1','1','1','1','0','1'),
@@ -104,9 +104,19 @@ class Bling(NeoPixel):
 	'w':('00000','00000','10001','10001','10101','01010'),	
 	'x':('00000','10001','01010','00100','01010','10001'),
 	'y':('00000','10001','10001','01010','00100','01000','10000'),
-	'z':('00000','11111','00010','00100','01000','11111')	
-	}
+	'z':('00000','11111','00010','00100','01000','11111'),
 	
+	'box':('111111','100001','100001','100001','100001','111111'),
+	'Box':('111111','111111','111111','111111','111111','111111'),
+	'TriR':('000001','000011','000111','001111','011111','111111'),
+	'triR':('000001','000011','000101','001001','010001','111111'),
+	'TriL':('100000','110000','111000','111100','111110','111111'),
+	'triL':('100000','110000','101000','100100','100010','111111'),
+	'arrowL':('000000','001000','011111','100001','011111','001000'),
+	'ArrowL':('000000','001000','011111','111111','011111','001000'),
+	'arrowR':('000000','000100','111110','100001','111110','000100'),
+	'ArrowR':('000000','000100','111110','111111','111110','000100'),	
+	}
 	
 	def __init__(self):
 		NeoPixel.__init__(self,Pin(18),320)
@@ -196,6 +206,7 @@ class Bling(NeoPixel):
 		while True:
 			if self.scrolling:
 				text=self.text
+				print(text)
 				self.text=''
 				rows=['','','','','','','']
 				for c in text:
@@ -221,8 +232,25 @@ class Bling(NeoPixel):
 					if self.text:
 						self.scrolling=False
 			await asyncio.sleep(0)
+	
+	def get_keys(self,text):
+		key_list=[]
+		shape_key=''
+		for c in text:
+			if c=='}':
+				key_list.append(shape_key[1:])
+				shape_key=''
+				continue
+			if shape_key:
+				shape_key += c
+				continue
+			if c=='{':
+				shape_key='1'
+				continue
+			key_list.append(c)
+		return key_list
 
-	async def display_text(self,text,colour=None,justify=None,scroll=False):
+	async def display(self,text,colour=None,justify=None,scroll=False):
 		self.text=' '
 		while self.text :
 			await asyncio.sleep(0)
@@ -230,34 +258,38 @@ class Bling(NeoPixel):
 			self.colour=colour
 		if justify is not None:
 			self.justify=justify
-		self.text=text
+		self.text=self.get_keys(text)
 		if scroll:
-			lt = self.length(text)
+			lt = self.length(self.text)
 			if lt < 39:
 				for i in range(39-lt):
 					text += ' '
-				self.text=text
+				self.text=self.get_keys(text)
 		while self.text :
 			await asyncio.sleep(0)
+
 
 			
 async def main():
 	d=Bling()
 	d.background=(d.BLUE(1))
-
+	
 	asyncio.create_task(d.show_text())
 	asyncio.create_task(d.scroll_text())
-	d.colour=d.RED()
-	d.text='123456'
-	await asyncio.sleep(5)
-	d.text='ABCDEFGHIJK'
-	await asyncio.sleep(3)
-	d.power.off()
-	await asyncio.sleep(3)
-	d.power.on()
-	await d.display_text('Testing',colour=d.PURPLE(1),scroll=True)
-	await asyncio.sleep(10)
-	d.power.off()
+	await d.display('{arrowL}   {triR}   {arrowL}',colour=d.RED(1),scroll=True)
+	while True:
+		await asyncio.sleep(10)
+	# d.colour=d.RED()
+	# d.text='123456'
+	# await asyncio.sleep(5)
+	# d.text='ABCDEFGHIJK'
+	# await asyncio.sleep(3)
+	# d.power.off()
+	# await asyncio.sleep(3)
+	# d.power.on()
+	# await d.display_text('{box}Testing',colour=d.PURPLE(1),scroll=True)
+	# await asyncio.sleep(10)
+	# d.power.off()
 	
 asyncio.run(main())
 	
