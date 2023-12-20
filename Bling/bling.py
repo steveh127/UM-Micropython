@@ -1,3 +1,4 @@
+import asyncio
 from machine import Pin
 from neopixel import NeoPixel
 from time import sleep
@@ -43,13 +44,13 @@ class Bling(NeoPixel):
 	'0':('0110','1001','1001','1001','1001','0110'),
 	'1':('010','110','010','010','010','010'),
 	'2':('0110','1001','0001','0010','0100','1111'),
-	'3':('0111','0001','0001','0111','0001','0111'),
+	'3':('1111','0001','0111','0001','0001','1110'),
 	'4':('0010','0110','1010','1111','0010','0010'),
 	'5':('1111','1000','1110','0001','0001','1110'),
 	'6':('0010','0100','1000','1110','1001','0110'),
 	'7':('1111','0001','0010','0100','0100','0100'),
 	'8':('0110','1001','0110','1001','1001','0110'),
-	'9':('0110','1001','1001','0111','0001','0001'),
+	'9':('0111','1001','1001','0111','0001','0001'),
 	
 	'A':('00100','01010','10001','11111','10001','10001'),
 	'B':('1110','1001','1110','1001','1001','1110'),
@@ -122,10 +123,15 @@ class Bling(NeoPixel):
 		self.WHITE = Colour((1,1,1),self.brightness)
 		self.BLACK = Colour((0,0,0),self.brightness)
 		
-		self.background=self.BLACK(0)
-		self.colour=self.GREEN()
-		
 		self.lines=[0,40,80,120,160,200,240,280]
+		
+		self.background=self.BLACK(0)
+		
+		self.text=''
+		self.colour=self.GREEN()
+		self.justify='C'
+		self.scrolling=False
+		self.scroll_text=''		
 		self.speed=0.2
 
 
@@ -159,58 +165,78 @@ class Bling(NeoPixel):
 		self.write()
 		return width
 	
-	def show_text(self,text,colour=None,justify='C',scrolling=False):
-		lt = 0
-		for c in text:
-			lt += len(self.chars[c][0]) + 1
-		lt -= 1
-		if lt > 38 or scrolling:
-			self.scroll(text,colour)
-			return
-		if justify == 'C' or justify == 'R':
-			if justify == 'C':
-				column = (39 - lt)//2
-			if justify == 'R':
-				column = 39 - lt
-		else:
-			column=1
-		if colour is None:
-			colour=self.colour
-		for ch in text:
-			column += self.show_char(ch,column,colour) + 1
+	async def show_text(self):
+		while True:
+			if self.text and not self.scrolling:
+				self.fill(self.background)
+				text=self.text
+				lt = 0
+				for c in text:
+					lt += len(self.chars[c][0]) + 1
+				lt -= 1
+				if lt > 38:
+					self.scroll_text=text
+					self.text=''
+					self.scrolling=True
+				else:
+					if self.justify == 'C' or justify == 'R':
+						if self.justify == 'C':
+							column = (39 - lt)//2
+						if self.justify == 'R':
+							column = 39 - lt
+					else:
+						column=1
+					colour=self.colour
+					for ch in text:
+						column += self.show_char(ch,column,colour) + 1
+					self.text=''
+			await asyncio.sleep(0)
 	
-	def scroll(self,text,colour=None,speed=None):
-		rows=['','','','','','','']
-		for c in text:
-			char = self.chars[c]
-			for i in range(6):
-				rows[i] += char[i] + '0'
-			if len(char)==7:
-				rows[6] += char[6] + '0'
-			else:
-				rows[6] += len(char[0])*'0' + '0'
-		if colour is None:
-			colour=self.colour
-		if speed is None:
-			speed=self.speed
-		while True:	
-			for start in range(-40,len(rows[0])):
-				self.fill(self.background)					
-				for i in range(7):
-					for col in range (0,38):
-						if (col+start) < len(rows[0]) and (col+start) > -1:
-							if rows[i][col + start] == '1':
-								self[self.lines[i+1] + col + 1]=colour
-				self.write()
-				sleep(speed)
-			sleep(0.2)
+	async def scroll(self):
+		while True:
+			if self.scroll_text:
+				text=self.scroll_text
+				self.scroll_text=''
+				self.scrolling=True
+				rows=['','','','','','','']
+				for c in text:
+					char = self.chars[c]
+					for i in range(6):
+						rows[i] += char[i] + '0'
+					if len(char)==7:
+						rows[6] += char[6] + '0'
+					else:
+						rows[6] += len(char[0])*'0' + '0'
+				colour=self.colour
+				speed=self.speed
+				while self.scrolling:	
+					for start in range(-40,len(rows[0])):
+						self.fill(self.background)					
+						for i in range(7):
+							for col in range (0,38):
+								if (col+start) < len(rows[0]) and (col+start) > -1:
+									if rows[i][col + start] == '1':
+										self[self.lines[i+1] + col + 1]=self.colour
+						self.write()
+						await asyncio.sleep(self.speed)
+					if self.text or self.scroll_text:
+						self.scrolling=False
+					await asyncio.sleep(0.2)
+			await asyncio.sleep(0)
 		
-d=Bling()
 
-d.background=(d.GREEN(1))
-d.fill(d.background)
-d.scroll('Yes please - go quietly',colour=d.PURPLE())
-
-
-
+async def main():
+	d=Bling()
+	d.background=(d.GREEN(1))
+	d.fill(d.background)
+	asyncio.create_task(d.show_text())
+	asyncio.create_task(d.scroll())
+	d.colour=d.RED()
+	d.text='123456'
+	await asyncio.sleep(5)
+	d.text='ABCDEFGHIJK'
+	while True:
+		await asyncio.sleep(5)
+		d.text='ZZZZ'
+asyncio.run(main())
 	
