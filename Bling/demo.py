@@ -18,20 +18,17 @@ class Button():
 d=Bling_Display()
 
 async def b0():
-	d.background=d.BLUE(1)
 	await d.display('Button 0')
 	
 async def b1():
-	print(d.text)
 	await d.display('Button 1',colour=d.GREEN())
 	
 async def b2():
-	d.background=d.GREEN(1)
-	await d.display('Button 2',colour=d.RED(1))
+	d.set_background(d.YELLOW(1))
 	
 async def b3():
-	d.background=d.BLACK(1)
-	await d.display('{ArrowR}Button 3',colour=d.BLUE(1))	
+	d.set_foreground(d.BLUE(1))
+	#await d.display('{ArrowR}Button 3',colour=d.BLUE(1))	
 
 async def main():
 	#d.background=(d.BLUE(1))

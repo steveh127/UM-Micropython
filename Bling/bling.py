@@ -135,6 +135,8 @@ class Bling_Display(NeoPixel):
 		
 		self.lines=[0,40,80,120,160,200,240,280]
 		
+		self.screen=[]
+		
 		self.background=self.BLACK(0)
 		
 		self.text=''
@@ -142,8 +144,33 @@ class Bling_Display(NeoPixel):
 		self.justify='C'
 		self.scrolling=False	
 		self.speed=0.2
-
-
+		
+	def save_screen(self):
+		self.screen=[]
+		for i in range (320):
+			self.screen.append(self[i])
+	
+	def restore_screen(self):
+		for i in range (320):
+			self[i]=self.screen[i]
+		self.write()
+	
+	def set_background(self,colour):
+		self.save_screen()
+		for i in range (320):
+			if self.screen[i] == tuple(self.background):
+				self.screen[i] = colour
+		self.background = colour
+		self.restore_screen()
+	
+	def set_foreground(self,colour):
+		self.save_screen()
+		for i in range (320):
+			if self.screen[i] == tuple(self.colour):
+				self.screen[i] = colour
+		self.colour = colour
+		self.restore_screen()
+				
 	def col(self,n,colour=None):
 		if colour is None:
 			colour=self.colour
