@@ -17,7 +17,7 @@ class Colour():
 				colour[i]=int(brightness*self.pattern[i])
 		return colour
                     
-class Bling(NeoPixel):
+class Bling_Display(NeoPixel):
 	chars = {
 	' ':('0','0','0','0','0','0'),
 	'.':('0','0','0','0','0','1'),
@@ -189,6 +189,7 @@ class Bling(NeoPixel):
 				if lt > 38:
 					self.scrolling=True
 				else:
+					self.scrolling=False
 					if self.justify == 'C' or self.justify == 'R':
 						if self.justify == 'C':
 							column = (39 - lt)//2
@@ -206,7 +207,6 @@ class Bling(NeoPixel):
 		while True:
 			if self.scrolling:
 				text=self.text
-				print(text)
 				self.text=''
 				rows=['','','','','','','']
 				for c in text:
@@ -221,6 +221,8 @@ class Bling(NeoPixel):
 				speed=self.speed
 				while self.scrolling:	
 					for start in range(-40,len(rows[0])):
+						if self.text:
+									break
 						self.fill(self.background)					
 						for i in range(7):
 							for col in range (0,38):
@@ -251,9 +253,6 @@ class Bling(NeoPixel):
 		return key_list
 
 	async def display(self,text,colour=None,justify=None,scroll=False):
-		self.text=' '
-		while self.text :
-			await asyncio.sleep(0)
 		if colour is not None:
 			self.colour=colour
 		if justify is not None:
@@ -270,26 +269,3 @@ class Bling(NeoPixel):
 
 
 			
-async def main():
-	d=Bling()
-	d.background=(d.BLUE(1))
-	
-	asyncio.create_task(d.show_text())
-	asyncio.create_task(d.scroll_text())
-	await d.display('{arrowL}   {triR}   {arrowL}',colour=d.RED(1),scroll=True)
-	while True:
-		await asyncio.sleep(10)
-	# d.colour=d.RED()
-	# d.text='123456'
-	# await asyncio.sleep(5)
-	# d.text='ABCDEFGHIJK'
-	# await asyncio.sleep(3)
-	# d.power.off()
-	# await asyncio.sleep(3)
-	# d.power.on()
-	# await d.display_text('{box}Testing',colour=d.PURPLE(1),scroll=True)
-	# await asyncio.sleep(10)
-	# d.power.off()
-	
-asyncio.run(main())
-	
