@@ -12,23 +12,22 @@ class Button():
 		while True:
 			if self.pin.value():
 				await self.action(*args)
-				await asyncio.sleep(0.3)
+				await asyncio.sleep(0.4)
 			await asyncio.sleep(0)
 
 d=Bling_Display()
 
 async def b0():
-	await d.display('Button 0')
+	await d.display('{ArrowL}',scroll=True,justify='R')
 	
 async def b1():
 	await d.display('Button 1',colour=d.GREEN())
 	
 async def b2():
-	d.set_background(d.YELLOW(1))
+	await d.display('1234567890',scroll=True)
 	
 async def b3():
-	d.set_foreground(d.BLUE(1))
-	#await d.display('{ArrowR}Button 3',colour=d.BLUE(1))	
+	d.set_background(d.BLUE(1))
 
 async def main():
 	#d.background=(d.BLUE(1))

@@ -147,30 +147,41 @@ class Bling_Display(NeoPixel):
 		
 	def save_screen(self):
 		self.screen=[]
-		for i in range (320):
-			self.screen.append(self[i])
+		for r in range (8):
+			row=[]
+			for c in range (40):
+			 row.append(self[self.lines[r]+c])
+			self.screen.append(row)
 	
 	def restore_screen(self):
-		for i in range (320):
-			self[i]=self.screen[i]
+		for r in range (8):
+			for c in range (40):
+				self[self.lines[r]+c] = self.screen[r][c]
 		self.write()
 	
 	def set_background(self,colour):
 		self.save_screen()
-		for i in range (320):
-			if self.screen[i] == tuple(self.background):
-				self.screen[i] = colour
+		for r in range (8):
+			for c in range (40):
+			 if self[self.lines[r]+c] == tuple(self.background):
+				self.screen[r][c] = colour
 		self.background = colour
 		self.restore_screen()
 	
-	def set_foreground(self,colour):
+	async def scroll_screen(self):
 		self.save_screen()
-		for i in range (320):
-			if self.screen[i] == tuple(self.colour):
-				self.screen[i] = colour
-		self.colour = colour
-		self.restore_screen()
-				
+		stop=False
+		while not stop and not self.scrolling:
+			for row in range(8):
+				if self.text:
+					stop=True
+				first=self.screen[row][0]
+				self.screen[row]=self.screen[row][1:]
+				self.screen[row].append(first)
+			self.restore_screen()
+			await asyncio.sleep(self.speed)
+		await asyncio.sleep(0.1)
+					
 	def col(self,n,colour=None):
 		if colour is None:
 			colour=self.colour
@@ -228,7 +239,7 @@ class Bling_Display(NeoPixel):
 					for ch in text:
 						column += self.show_char(ch,column,colour) + 1
 					self.text=''
-			await asyncio.sleep(0)
+			await asyncio.sleep(0.2)
 	
 	async def scroll_text(self):
 		while True:
@@ -285,14 +296,10 @@ class Bling_Display(NeoPixel):
 		if justify is not None:
 			self.justify=justify
 		self.text=self.get_keys(text)
-		if scroll:
-			lt = self.length(self.text)
-			if lt < 39:
-				for i in range(39-lt):
-					text += ' '
-				self.text=self.get_keys(text)
 		while self.text :
 			await asyncio.sleep(0)
+		if scroll:
+			await self.scroll_screen()
 
 
 			
