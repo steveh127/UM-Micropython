@@ -18,7 +18,36 @@ class Colour():
 		return colour
                     
 class Bling_Display(NeoPixel):
-	chars = {
+	
+	
+	def __init__(self):
+		NeoPixel.__init__(self,Pin(18),320)
+		self.power=Pin(6,Pin.OUT)
+		self.power.on()
+		self.brightness=5
+		
+		self.RED = Colour((1,0,0),self.brightness)
+		self.GREEN = Colour((0,1,0),self.brightness)
+		self.YELLOW = Colour((2,1,0),self.brightness)
+		self.ORANGE = Colour((4,0.5,0),self.brightness)
+		self.BLUE = Colour((0,0,1),self.brightness)
+		self.PURPLE = Colour((3,0,1),self.brightness)
+		self.WHITE = Colour((1,1,1),self.brightness)
+		self.BLACK = Colour((0,0,0),self.brightness)
+		
+		self.lines=[0,40,80,120,160,200,240,280]
+		
+		self.screen=[]
+		
+		self.background=self.BLACK(1)
+		
+		self.text=''
+		self.colour=self.GREEN()
+		self.justify='C'
+		self.scrolling=False	
+		self.speed=0.2
+		
+		self.chars = {
 	' ':('0','0','0','0','0','0'),
 	'.':('0','0','0','0','0','1'),
 	'!':('1','1','1','1','0','1'),
@@ -115,35 +144,12 @@ class Bling_Display(NeoPixel):
 	'arrowL':('000000','001000','011111','100001','011111','001000'),
 	'ArrowL':('000000','001000','011111','111111','011111','001000'),
 	'arrowR':('000000','000100','111110','100001','111110','000100'),
-	'ArrowR':('000000','000100','111110','111111','111110','000100'),	
-	}
+	'ArrowR':('000000','000100','111110','111111','111110','000100'),
 	
-	def __init__(self):
-		NeoPixel.__init__(self,Pin(18),320)
-		self.power=Pin(6,Pin.OUT)
-		self.power.on()
-		self.brightness=5
-		
-		self.RED = Colour((1,0,0),self.brightness)
-		self.GREEN = Colour((0,1,0),self.brightness)
-		self.YELLOW = Colour((2,1,0),self.brightness)
-		self.ORANGE = Colour((4,0.5,0),self.brightness)
-		self.BLUE = Colour((0,0,1),self.brightness)
-		self.PURPLE = Colour((3,0,1),self.brightness)
-		self.WHITE = Colour((1,1,1),self.brightness)
-		self.BLACK = Colour((0,0,0),self.brightness)
-		
-		self.lines=[0,40,80,120,160,200,240,280]
-		
-		self.screen=[]
-		
-		self.background=self.BLACK(0)
-		
-		self.text=''
-		self.colour=self.GREEN()
-		self.justify='C'
-		self.scrolling=False	
-		self.speed=0.2
+	'RED':  ('#',self.RED),
+	'GREEN':('#',self.GREEN),
+	'BLUE': ('#',self.BLUE),	
+	}
 		
 	def save_screen(self):
 		self.screen=[]
@@ -200,6 +206,9 @@ class Bling_Display(NeoPixel):
 		if colour is None:
 			colour=self.colour
 		character=self.chars[char]
+		if character[0] == '#':
+			self.colour = character[1](brightness=self.brightness)
+			return 0
 		width = len(character[0])
 		line=1
 		for row in character:
@@ -235,9 +244,8 @@ class Bling_Display(NeoPixel):
 							column = 39 - lt
 					else:
 						column=1
-					colour=self.colour
 					for ch in text:
-						column += self.show_char(ch,column,colour) + 1
+						column += self.show_char(ch,column,self.colour) + 1
 					self.text=''
 			await asyncio.sleep(0.2)
 	
@@ -290,11 +298,13 @@ class Bling_Display(NeoPixel):
 			key_list.append(c)
 		return key_list
 
-	async def display(self,text,colour=None,justify=None,scroll=False):
+	async def display(self,text,colour=None,justify=None,brightness=None,scroll=False):
 		if colour is not None:
 			self.colour=colour
 		if justify is not None:
 			self.justify=justify
+		if brightness is not None:
+			self.brightness=brightness
 		self.text=self.get_keys(text)
 		while self.text :
 			await asyncio.sleep(0)

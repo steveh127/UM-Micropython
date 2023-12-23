@@ -21,10 +21,10 @@ async def b0():
 	await d.display('{ArrowL}',scroll=True,justify='R')
 	
 async def b1():
-	await d.display('Button 1',colour=d.GREEN())
+	await d.display('Button {RED}1',colour=d.GREEN(3))
 	
 async def b2():
-	await d.display('1234567890',scroll=True)
+	await d.display('1{GREEN}23{BLUE}45{RED}6',colour=d.RED(3))
 	
 async def b3():
 	d.set_background(d.BLUE(1))
