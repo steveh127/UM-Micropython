@@ -1,19 +1,7 @@
 import asyncio
 from machine import Pin
 
-from bling import Bling_Display
-
-class Button():
-	def __init__(self,pin,action):
-		self.pin=Pin(pin,Pin.IN)
-		self.action=action
-	
-	async def __call__(self,*args):
-		while True:
-			if self.pin.value():
-				await self.action(*args)
-				await asyncio.sleep(0.4)
-			await asyncio.sleep(0)
+from bling import Bling_Display,Button
 
 d=Bling_Display()
 
@@ -21,10 +9,10 @@ async def b0():
 	await d.display('{ArrowL}',scroll=True,justify='R')
 	
 async def b1():
-	await d.display('Button {RED}1',colour=d.GREEN(3))
+	await d.display('Button {RED}11',colour=d.GREEN(3),justify=('L'))
 	
 async def b2():
-	await d.display('1{GREEN}23{BLUE}45{RED}6',colour=d.RED(3))
+	await d.display('{RED}1{GREEN}23{BLUE}45{RED}61',brightness=3)
 	
 async def b3():
 	d.set_background(d.BLUE(1))
@@ -36,22 +24,11 @@ async def main():
 	asyncio.create_task(d.scroll_text())
 	for button in buttons:
 		asyncio.create_task(button())
-	await d.display('Testing 1 3 5  6',colour=d.RED(1))
+	await d.display('{RED}Testing {BLUE}1 2 3 {GREEN}4 5 6 ',brightness=3)
 	while True:
 		await asyncio.sleep(5)
-		#await d.display('TESTED',colour=d.RED(1))
-	# d.colour=d.RED()
-	# d.text='123456'
-	# await asyncio.sleep(5)
-	# d.text='ABCDEFGHIJK'
-	# await asyncio.sleep(3)
-	# d.power.off()
-	# await asyncio.sleep(3)
-	# d.power.on()
-	# await d.display_text('{box}Testing',colour=d.PURPLE(1),scroll=True)
-	# await asyncio.sleep(10)
-	# d.power.off()
 	
 asyncio.run(main())
 	
 
+			

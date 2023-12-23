@@ -71,7 +71,7 @@ class Bling_Display(NeoPixel):
 	'>':('000','100','010','001','010','100'),
 	
 	'0':('0110','1001','1001','1001','1001','0110'),
-	'1':('010','110','010','010','010','010'),
+	'1':('01','11','01','01','01','01'),
 	'2':('0110','1001','0001','0010','0100','1111'),
 	'3':('1111','0001','0111','0001','0001','1110'),
 	'4':('0010','0110','1010','1111','0010','0010'),
@@ -218,13 +218,13 @@ class Bling_Display(NeoPixel):
 					self[self.lines[line]+col+p]=colour
 				p += 1
 			line += 1
-		self.write()
 		return width
 		
 	def length(self,text):
 		length=0
 		for c in text:
-					length += len(self.chars[c][0]) + 1
+			if self.chars[c][0] != '#':
+				length += len(self.chars[c][0]) + 1
 		return length - 1
 	
 	async def show_text(self):
@@ -245,41 +245,14 @@ class Bling_Display(NeoPixel):
 					else:
 						column=1
 					for ch in text:
-						column += self.show_char(ch,column,self.colour) + 1
+						width = self.show_char(ch,column,self.colour) + 1
+						if width > 1:
+							column += width							
+					self.write()
 					self.text=''
 			await asyncio.sleep(0.2)
 	
-	async def scroll_text(self):
-		while True:
-			if self.scrolling:
-				text=self.text
-				self.text=''
-				rows=['','','','','','','']
-				for c in text:
-					char = self.chars[c]
-					for i in range(6):
-						rows[i] += char[i] + '0'
-					if len(char)==7:
-						rows[6] += char[6] + '0'
-					else:
-						rows[6] += len(char[0])*'0' + '0'
-				colour=self.colour
-				speed=self.speed
-				while self.scrolling:	
-					for start in range(-40,len(rows[0])):
-						if self.text:
-									break
-						self.fill(self.background)					
-						for i in range(7):
-							for col in range (0,38):
-								if (col+start) < len(rows[0]) and (col+start) > -1:
-									if rows[i][col + start] == '1':
-										self[self.lines[i+1] + col + 1]=self.colour
-						self.write()
-						await asyncio.sleep(self.speed)
-					if self.text:
-						self.scrolling=False
-			await asyncio.sleep(0)
+
 	
 	def get_keys(self,text):
 		key_list=[]
@@ -310,6 +283,66 @@ class Bling_Display(NeoPixel):
 			await asyncio.sleep(0)
 		if scroll:
 			await self.scroll_screen()
-
-
 			
+	def write_char(self,char,col):
+		colour=self.colour
+		character=self.chars[char]
+		if character[0] == '#':
+			self.colour = character[1](brightness=self.brightness)
+			return 0
+		width = len(character[0])
+		line=1
+		for row in character:
+			p=0
+			for c in row:
+				if c == '1':
+					self.text_buffer[line][col+p]=colour
+				p += 1
+			line += 1
+		return width			
+			
+			
+	async def scroll_text(self):
+		while True:
+			if self.scrolling:
+				text=self.text
+				self.text=''
+				len_txt = self.length(text)
+				self.text_buffer=[]
+				for row in range(8):
+					row=[]
+					for col in range(len_txt+1):
+						row.append(self.background)
+					self.text_buffer.append(row)
+				column=1
+				for ch in text:
+					width = self.write_char(ch,column) + 1
+					if width > 1:
+						column += width
+				while self.scrolling:
+					for line in self.lines:
+						for c in range(40):
+							self[line+c]=self.text_buffer[line//40][c]
+					self.write()
+					#do the scroll
+					for row in range(8):
+						first=self.text_buffer[row][:1]
+						self.text_buffer[row]=self.text_buffer[row][1:]
+						self.text_buffer[row].append(first[0])
+					await asyncio.sleep(self.speed)
+					if self.text:
+						self.scrolling=False
+			await asyncio.sleep(0)			
+
+class Button():
+	def __init__(self,pin,action):
+		self.pin=Pin(pin,Pin.IN)
+		self.action=action
+	
+	async def __call__(self,*args):
+		while True:
+			if self.pin.value():
+				await self.action(*args)
+				await asyncio.sleep(0.4)
+			await asyncio.sleep(0)
+
