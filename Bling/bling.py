@@ -46,6 +46,7 @@ class Bling_Display(NeoPixel):
 		self.justify='C'
 		self.scrolling=False	
 		self.speed=0.2
+		self.gap=1
 		
 		self.chars = {
 	' ':('0','0','0','0','0','0'),
@@ -148,7 +149,12 @@ class Bling_Display(NeoPixel):
 	
 	'RED':  ('#',self.RED),
 	'GREEN':('#',self.GREEN),
-	'BLUE': ('#',self.BLUE),	
+	'BLUE': ('#',self.BLUE),
+	'YELLOW': ('#',self.YELLOW),
+	'ORANGE' : ('#',self.ORANGE),
+	'PURPLE' : ('#',self.PURPLE),
+	'WHITE' : ('#',self.WHITE),
+	'BLACK' : ('#',self.BLACK),	
 	}
 		
 	def save_screen(self):
@@ -224,8 +230,8 @@ class Bling_Display(NeoPixel):
 		length=0
 		for c in text:
 			if self.chars[c][0] != '#':
-				length += len(self.chars[c][0]) + 1
-		return length - 1
+				length += len(self.chars[c][0]) + self.gap
+		return length - self.gap
 	
 	async def show_text(self):
 		while True:
@@ -245,8 +251,8 @@ class Bling_Display(NeoPixel):
 					else:
 						column=1
 					for ch in text:
-						width = self.show_char(ch,column,self.colour) + 1
-						if width > 1:
+						width = self.show_char(ch,column,self.colour) + self.gap
+						if width > self.gap:
 							column += width							
 					self.write()
 					self.text=''
@@ -316,8 +322,8 @@ class Bling_Display(NeoPixel):
 					self.text_buffer.append(row)
 				column=1
 				for ch in text:
-					width = self.write_char(ch,column) + 1
-					if width > 1:
+					width = self.write_char(ch,column) + self.gap
+					if width > self.gap:
 						column += width
 				while self.scrolling:
 					for line in self.lines:
@@ -332,7 +338,14 @@ class Bling_Display(NeoPixel):
 					await asyncio.sleep(self.speed)
 					if self.text:
 						self.scrolling=False
-			await asyncio.sleep(0)			
+			await asyncio.sleep(0)
+			
+	async def clear(self):
+		self.text=' '
+		while self.text:
+			await asyncio.sleep(0)
+		self.fill((0,0,0))
+		self.write()			
 
 class Button():
 	def __init__(self,pin,action):
