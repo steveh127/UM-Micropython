@@ -154,9 +154,11 @@ class Bling_Display(NeoPixel):
 	'ORANGE' : ('#',self.ORANGE),
 	'PURPLE' : ('#',self.PURPLE),
 	'WHITE' : ('#',self.WHITE),
-	'BLACK' : ('#',self.BLACK),	
+	'BLACK' : ('#',self.BLACK),
+	
 	}
-		
+	
+	
 	def save_screen(self):
 		self.screen=[]
 		for r in range (8):
@@ -211,6 +213,8 @@ class Bling_Display(NeoPixel):
 	def show_char(self,char,col,colour=None):
 		if colour is None:
 			colour=self.colour
+		if char not in self.chars.keys():
+			char='.'
 		character=self.chars[char]
 		if character[0] == '#':
 			self.colour = character[1](brightness=self.brightness)
@@ -229,6 +233,8 @@ class Bling_Display(NeoPixel):
 	def length(self,text):
 		length=0
 		for c in text:
+			if c not in self.chars.keys():
+				c='.'
 			if self.chars[c][0] != '#':
 				length += len(self.chars[c][0]) + self.gap
 		return length - self.gap
@@ -292,6 +298,8 @@ class Bling_Display(NeoPixel):
 			
 	def write_char(self,char,col):
 		colour=self.colour
+		if char not in self.chars.keys():
+			char='.'
 		character=self.chars[char]
 		if character[0] == '#':
 			self.colour = character[1](brightness=self.brightness)
