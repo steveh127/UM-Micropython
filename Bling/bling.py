@@ -277,7 +277,7 @@ class Bling_Display(NeoPixel):
 			key_list.append(c)
 		return key_list
 
-	async def display(self,text,colour=None,justify=None,brightness=None,scroll=False):
+	async def show(self,text,colour=None,justify=None,brightness=None,scroll=False):
 		if colour is not None:
 			self.colour=colour
 		if justify is not None:
@@ -347,15 +347,21 @@ class Bling_Display(NeoPixel):
 		self.fill((0,0,0))
 		self.write()			
 
-class Button():
-	def __init__(self,pin,action):
-		self.pin=Pin(pin,Pin.IN)
-		self.action=action
-	
-	async def __call__(self,*args):
+
+class Bling_Buttons():
+	def __init__(self,actions):
+		buttons=[11,10,33,34]
+		self.buttons=[[],[],[],[]]
+		for i,button in enumerate(buttons):
+			self.buttons[i]=(Pin(button,Pin.IN),actions[i])
+		
+	async def check(self):
 		while True:
-			if self.pin.value():
-				await self.action(*args)
-				await asyncio.sleep(0.4)
+			for button in self.buttons:
+				if button[0].value():
+					action=button[1]
+					await action()
+					await asyncio.sleep(0.4)
 			await asyncio.sleep(0)
 
+			
