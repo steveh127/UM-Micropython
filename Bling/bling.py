@@ -367,9 +367,9 @@ class Bling_Display(NeoPixel):
 		self.write()			
 
 
-	async def bar_chart(self,*args,high=7,colour='{BLUE}'):
+	async def bar_chart(self,*args,high=7,colour='{BLUE}',pre='',post=''):
 		bars=('{Bar0}','{Bar1}','{Bar2}','{Bar3}','{Bar4}','{Bar5}','{Bar6}','{Bar7}')
-		chart=''
+		chart=pre
 		step = high/7
 		for value in args:
 			h=int(value[0] // step)
@@ -382,6 +382,7 @@ class Bling_Display(NeoPixel):
 				else:
 					chart += colour
 			chart += bars[h]
+		chart += post
 		await self.show(chart)
 
 class Bling_Buttons():

@@ -11,7 +11,7 @@ colours=('{BLUE}','{RED}','{GREEN}','{YELLOW}','{PURPLE}','{WHITE}')
 
 
 async def b0():
-	display.gap=0
+	display.gap=1
 	while True:
 		await display.bar_chart( 
 		                  (randint(0,100),),
@@ -20,7 +20,9 @@ async def b0():
 		                  (randint(0,100),colours[randint(0,5)]),
 		                  (randint(0,100),colours[randint(0,5)]),
 		                  [randint(0,100)],
-		                  high=100
+		                  high=100,
+		                  pre='x',
+		                  post='1'
 		                 
 		                )
 		await asyncio.sleep(1)
