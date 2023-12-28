@@ -1,15 +1,30 @@
 import asyncio
 from machine import Pin
+from random import randint
 
 from bling import Bling_Display,Bling_Buttons
 
 display=Bling_Display()
 
+
+colours=('{BLUE}','{RED}','{GREEN}','{YELLOW}','{PURPLE}','{WHITE}')
+
+
 async def b0():
-	#await display.display('{ArrowL}',scroll=True,justify='R')
-	await display.clear()
-	#display.row(3,colour=(display.BLUE()))
-	
+	display.gap=0
+	while True:
+		await display.bar_chart( 
+		                  (randint(0,100),),
+		                  (randint(0,100),colours[randint(0,5)]),
+		                  (randint(0,100),colours[randint(0,5)]),
+		                  (randint(0,100),colours[randint(0,5)]),
+		                  (randint(0,100),colours[randint(0,5)]),
+		                  [randint(0,100)],
+		                  high=100
+		                 
+		                )
+		await asyncio.sleep(1)
+		
 async def b1():
 	await display.show('Button {RED}1|',colour=display.GREEN(3),justify=('L'))
 	

@@ -147,6 +147,17 @@ class Bling_Display(NeoPixel):
 	'arrowR':('000000','000100','111110','100001','111110','000100'),
 	'ArrowR':('000000','000100','111110','111111','111110','000100'),
 	
+	'Bar0':('000','000','000','000','000','000','000'),
+	'Bar1':('000','000','000','000','000','000','111'),
+	'Bar2':('000','000','000','000','000','111','111'),
+	'Bar3':('000','000','000','000','111','111','111'),
+	'Bar4':('000','000','000','111','111','111','111'),
+	'Bar5':('000','000','111','111','111','111','111'),
+	'Bar6':('000','111','111','111','111','111','111'),
+	'Bar7':('111','111','111','111','111','111','111'),
+	
+
+	
 	'RED':  ('#',self.RED),
 	'GREEN':('#',self.GREEN),
 	'BLUE': ('#',self.BLUE),
@@ -355,6 +366,23 @@ class Bling_Display(NeoPixel):
 		self.fill((0,0,0))
 		self.write()			
 
+
+	async def bar_chart(self,*args,high=7,colour='{BLUE}'):
+		bars=('{Bar0}','{Bar1}','{Bar2}','{Bar3}','{Bar4}','{Bar5}','{Bar6}','{Bar7}')
+		chart=''
+		step = high/7
+		for value in args:
+			h=int(value[0] // step)
+			if h > 7:
+				h=7
+				chart += '{RED}'
+			else:
+				if len(value) > 1:
+					chart += value[1]
+				else:
+					chart += colour
+			chart += bars[h]
+		await self.show(chart)
 
 class Bling_Buttons():
 	def __init__(self,actions):
