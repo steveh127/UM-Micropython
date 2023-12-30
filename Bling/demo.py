@@ -6,13 +6,11 @@ from bling import Bling_Display,Bling_Buttons
 
 display=Bling_Display()
 
-
-colours=('{BLUE}','{RED}','{GREEN}','{YELLOW}','{PURPLE}','{WHITE}')
-
-
-async def b0():
+async def random_bar_graph():
+	display.scrolling=False
+	colours=('{BLUE}','{RED}','{GREEN}','{YELLOW}','{PURPLE}','{WHITE}')
 	display.gap=1
-	while True:
+	while not display.text and not display.scrolling:
 		await display.bar_chart( 
 		                  (randint(0,100),),
 		                  (randint(0,100),colours[randint(0,5)]),
@@ -23,16 +21,18 @@ async def b0():
 		                  high=100,
 		                  pre='x',
 		                  post='1'
-		                 
 		                )
 		await asyncio.sleep(1)
+
+async def b0():
+	asyncio.create_task(random_bar_graph())
+	await asyncio.sleep(0.3)
 		
 async def b1():
-	await display.show('Button {RED}1|',colour=display.GREEN(3),justify=('L'))
+	await display.show('{NO GAP}Button {RED}1|',colour=display.GREEN(3),justify=('L'))
 	
 async def b2():
-	display.gap=0
-	await display.show('{RED}1{GREEN}23{BLUE}45{WHITE}678{RED}9&{YELLOW}1{GREEN}23{PURPLE}45',brightness=3)
+	await display.show('{RED}1{GREEN}23{BLUE}{GAP}45{WHITE}678{NO GAP}{RED}9&{YELLOW}1{GREEN}23{PURPLE}45',brightness=3)
 	display.gap=1
 	
 async def b3():
@@ -47,7 +47,7 @@ async def main():
 	asyncio.create_task(display.show_text())
 	asyncio.create_task(display.scroll_text())
 	asyncio.create_task(buttons.check())
-	await display.show('{RED}Testing {BLUE}1 2 3 {GREEN}4 5 6 ',brightness=3)
+	await display.show('{RED}Testing {BLUE}{NO GAP}123{GREEN}{GAP}4 5 6 ',brightness=3)
 	while True:
 		await asyncio.sleep(5)
 	
