@@ -194,8 +194,7 @@ class Bling_Display(NeoPixel):
 			for c in range (40):
 				self[self.lines[r]+c] = self.screen[r][c]
 		self.write()
-		
-	
+			
 	def set_background(self,colour):
 		self.save_screen()
 		for r in range (8):
