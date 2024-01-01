@@ -238,7 +238,8 @@ class Bling_Display(NeoPixel):
 			return 0
 		if mark_up[1] == 'G':
 			self.gap = mark_up[2]
-			return mark_up[2]
+			#return mark_up[2]
+			return 1
 		return 0
 	
 	#updates neopixel array - doesn't actually update display
@@ -276,6 +277,7 @@ class Bling_Display(NeoPixel):
 	async def show_text(self):
 		while True:
 			if self.text and not self.scrolling:
+				self.gap=1
 				self.fill(self.background)
 				text=self.text
 				lt = self.length(text)
@@ -412,6 +414,10 @@ class Bling_Display(NeoPixel):
 			chart += bars[h]
 		chart += post
 		await self.show(chart)
+	
+	def setup_tasks(self):
+		asyncio.create_task(self.show_text())
+		asyncio.create_task(self.scroll_text())
 
 #class to handle buttons - must be supplied with a list of actions as coroutines.
 class Bling_Buttons():
