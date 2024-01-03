@@ -32,7 +32,7 @@ async def b0():
 	await asyncio.sleep(0.3)
 		
 async def b1():
-	await display.show('{NO GAP}Button{GAP} {RED}1|',colour=display.GREEN(3),justify=('L'))
+	await display.show_time((15,32))
 	
 async def b2():
 	await display.show('{RED}1{GREEN}23{BLUE}{NO GAP}45{WHITE}678{NO GAP}{RED}9&{YELLOW}1{GREEN}23{PURPLE}45',brightness=3)

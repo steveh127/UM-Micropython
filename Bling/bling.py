@@ -92,7 +92,7 @@ class Bling_Display(NeoPixel):
 '6':('0010','0100','1000','1110','1001','0110'),
 '7':('1111','0001','0010','0100','0100','0100'),
 '8':('0110','1001','0110','1001','1001','0110'),
-'9':('0111','1001','1001','0111','0001','0001'),
+'9':('0110','1001','1001','0111','0001','0010'),
 
 'A':('00100','01010','10001','11111','10001','10001'),
 'B':('1110','1001','1110','1001','1001','1110'),
@@ -414,6 +414,19 @@ class Bling_Display(NeoPixel):
 			chart += bars[h]
 		chart += post
 		await self.show(chart)
+		
+	async def show_time(self,time=None):
+		if time is None:
+			await self.show(' ')
+		else:
+			m,s=time
+			m=str(m)
+			s=str(s)
+			if len(m)==1:
+				m='0'+m
+			if len(s)==1:
+				s='0'+s
+			await self.show(str(m)+' : '+str(s))
 	
 	def setup_tasks(self):
 		asyncio.create_task(self.show_text())
