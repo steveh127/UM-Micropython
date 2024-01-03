@@ -1,7 +1,7 @@
 '''
 Driver program for a kitchen clock / timer.
 
-Hardware required:
+Hardware requiself.display.RED():
 
 Network capable MCU running micropython. .
 Display with a driver having a show_time funcion that takes a time tuple (min,secs or hour/min)
@@ -101,19 +101,20 @@ class Clock(Network_Tools):
 	async def run(self):
 		self._get_time()
 		on = False
+		showing=True
 		while True:
 			self._get_time()
 			if self.show:
 				if self.sec == 0 or not on:
 					on=True
 					await self.show_time()
+					showing=True
 			else:
-				on=False
-				await self._show_time()
+				if showing:
+					on=False
+					showing=False
+					await self._show_time()
 			await asyncio.sleep(1)
-RED='RED'
-GREEN='GREEN'
-BLUE='BLUE'
 
 class ClockTimer():
 	#show_time is a function that takes a time tuple (min,secs) and updates a display, 
@@ -122,10 +123,9 @@ class ClockTimer():
 	def __init__(self,mins=0,secs=0):
 		self.display=Bling_Display()
 		self.display.setup_tasks()
-		self.display.text='Setting Time'
+		self.display.text='Bling!'
+		self.display.show_string()
 		self.show_time = self.display.show_time
-		#self.rgb = UniPixel(rgb)
-		#self.buzz = buzzer
 		self.__mins = mins
 		self.__secs = secs
 		self.mins = mins
@@ -134,7 +134,7 @@ class ClockTimer():
 		self.state= 'clock_on'
 		
 	def rgb(self,colour):
-		print(colour)
+		self.display.colour=colour
 	
 	@property
 	def state(self):
@@ -148,14 +148,14 @@ class ClockTimer():
 		if state == 'clock_off':
 			self.clock.show=False
 		if state == 'ready':
-			self.rgb(BLUE)
+			self.rgb(self.display.BLUE())
 			self.mins,self.secs = 0,0
 		if self.state == 'run_paused' or self.state == 'timer_paused':
-			self.rgb(BLUE)
+			self.rgb(self.display.BLUE())
 		if state == 'running' or state == 'timing':
-			self.rgb(GREEN)
+			self.rgb(self.display.GREEN())
 		if state == 'finished' or state == 'timed':
-			self.rgb(RED)	
+			self.rgb(self.display.RED())	
 	
 	@property
 	def mins(self):
@@ -179,7 +179,7 @@ class ClockTimer():
 		if self.secs % 2:
 			self.rgb(colour)
 		else:
-			self.rgb('Clear')
+			self.rgb(self.display.GREEN())
 			
 	#extra state checks are there to handle change of state while in 
 	#timing loop.		
@@ -193,7 +193,7 @@ class ClockTimer():
 						self.secs = 59
 					else:
 						self.secs -=1
-					self._toggle(GREEN)
+					self._toggle(self.display.BLUE())
 			if self.state == 'running':		
 				self.state='finished'
 			await asyncio.sleep(0)
@@ -211,21 +211,19 @@ class ClockTimer():
 						m += 1
 					self.secs = s
 					self.mins = m
-					self._toggle(GREEN)
+					self._toggle(self.display.GREEN())
 			await asyncio.sleep(0)
 	
 	#flashes an LED and beeps while 'finished' 			
 	async def finish(self):
 		while True:
 			if self.state == 'finished':
-				self.buzz.on()
-				await asyncio.sleep(0.2)
-				self.buzz.off()
 				if self.state == 'finished':
-					self.rgb(RED)
+					self.rgb(self.display.RED())
 				await asyncio.sleep(0.5)
 				if self.state == 'finished':
-					self.rgb('Clear')
+					self.rgb(self.display.GREEN())
+				await asyncio.sleep(0.5)
 			await asyncio.sleep(0)
 	
 	async def state_machine(self,b_set,b_start):
@@ -249,7 +247,7 @@ class ClockTimer():
 					await asyncio.sleep(.3)		
 					self.state = 'clock_on'
 				if self.state == 'finished':
-					self.buzz.off()
+					#self.buzz.off()
 					await asyncio.sleep(.3)		
 					self.state = 'clock_on'
 

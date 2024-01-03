@@ -132,7 +132,7 @@ class Bling_Display(NeoPixel):
 'i':('00','10','00','10','10','01'),
 'j':('001','000','001','001','001','001','110'),
 'k':('000','100','100','101','110','101'),
-'l':('110','010','010','010','010','111'),
+'l':('010','010','010','010','010','001'),
 'm':('00000','11110','10101','10101','10101','10101'),
 'n':('0000','1110','1001','1001','1001','1001'),
 'o':('0000','0110','1001','1001','1001','0110'),
@@ -272,6 +272,29 @@ class Bling_Display(NeoPixel):
 			if self.chars[c][0] != '#':
 				length += len(self.chars[c][0]) + self.gap
 		return length - self.gap
+	
+	def show_string(self):
+		self.gap=1
+		self.fill(self.background)
+		text=self.text
+		lt = self.length(text)
+		if lt > 38:
+			self.scrolling=True
+		else:
+			self.scrolling=False
+			if self.justify == 'C' or self.justify == 'R':
+				if self.justify == 'C':
+					column = (39 - lt)//2
+				if self.justify == 'R':
+					column = 39 - lt
+			else:
+				column=1
+			for ch in text:
+				width = self.show_char(ch,column,self.colour) + self.gap
+				if width > self.gap:
+					column += width							
+			self.write()
+			self.text=''
 	
 	#display text using asyncio - essential task must be running if asyncio used.
 	async def show_text(self):
