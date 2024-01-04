@@ -273,7 +273,7 @@ class Bling_Display(NeoPixel):
 				length += len(self.chars[c][0]) + self.gap
 		return length - self.gap
 	
-	def show_string(self):
+	def _show_string(self):
 		self.gap=1
 		self.fill(self.background)
 		text=self.text
@@ -300,27 +300,7 @@ class Bling_Display(NeoPixel):
 	async def show_text(self):
 		while True:
 			if self.text and not self.scrolling:
-				self.gap=1
-				self.fill(self.background)
-				text=self.text
-				lt = self.length(text)
-				if lt > 38:
-					self.scrolling=True
-				else:
-					self.scrolling=False
-					if self.justify == 'C' or self.justify == 'R':
-						if self.justify == 'C':
-							column = (39 - lt)//2
-						if self.justify == 'R':
-							column = 39 - lt
-					else:
-						column=1
-					for ch in text:
-						width = self.show_char(ch,column,self.colour) + self.gap
-						if width > self.gap:
-							column += width							
-					self.write()
-					self.text=''
+				self._show_string()
 			await asyncio.sleep(0.2)
 	
 	#convert text string to string of 'chars' keys
@@ -356,8 +336,17 @@ class Bling_Display(NeoPixel):
 		if scroll:
 			await self.scroll_screen()
 	
-
-				
+	#non async version of show
+	def show_string(self,text,colour=None,justify=None,brightness=None):
+		if colour is not None:
+			self.colour=colour
+		if justify is not None:
+			self.justify=justify
+		if brightness is not None:
+			self.brightness=brightness
+		self.text=self.get_keys(text)
+		self._show_string()
+			
 	#used when scrolling longer text blocks 
 	def write_char(self,char,col):
 		colour=self.colour
@@ -437,7 +426,8 @@ class Bling_Display(NeoPixel):
 			chart += bars[h]
 		chart += post
 		await self.show(chart)
-		
+	
+	#time should be presented as (m,s) tuple	
 	async def show_time(self,time=None):
 		if time is None:
 			await self.show(' ')
@@ -447,8 +437,14 @@ class Bling_Display(NeoPixel):
 			s=str(s)
 			if len(m)==1:
 				m='0'+m
+			for c in m:
+				if c == '1':
+					m += ' '
 			if len(s)==1:
 				s='0'+s
+			for c in s:
+				if c == '1':
+					s += ' '
 			await self.show(str(m)+' : '+str(s))
 	
 	def setup_tasks(self):

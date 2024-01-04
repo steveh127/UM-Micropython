@@ -117,14 +117,12 @@ class Clock(Network_Tools):
 			await asyncio.sleep(1)
 
 class ClockTimer():
-	#show_time is a function that takes a time tuple (min,secs) and updates a display, 
-	#rgb is GPIO pin for a single rgb neopixel, a 'UniPixel' 
+	#show_time is a function that takes a time tuple (min,secs) and updates a display,  
 	
 	def __init__(self,mins=0,secs=0):
 		self.display=Bling_Display()
 		self.display.setup_tasks()
-		self.display.text='Bling!'
-		self.display.show_string()
+		self.display.show_string('{RED}Bling{GREEN}!')
 		self.show_time = self.display.show_time
 		self.__mins = mins
 		self.__secs = secs
@@ -145,6 +143,7 @@ class ClockTimer():
 		self.__state = state
 		if state == 'clock_on':
 			self.clock.show=True
+			self.rgb(self.display.GREEN())
 		if state == 'clock_off':
 			self.clock.show=False
 		if state == 'ready':
@@ -156,25 +155,7 @@ class ClockTimer():
 			self.rgb(self.display.GREEN())
 		if state == 'finished' or state == 'timed':
 			self.rgb(self.display.RED())	
-	
-	@property
-	def mins(self):
-		return self.__mins
-	
-	@mins.setter
-	def mins(self,m):
-		self.__mins = m
-		#await self.show_time((self.__mins,self.__secs))	
-	
-	@property
-	def secs(self):
-		return self.__secs
-	
-	@secs.setter
-	def secs(self,s):
-		self.__secs = s
-		#await self.show_time((self.__mins,self.__secs))
-	
+		
 	def _toggle(self,colour):
 		if self.secs % 2:
 			self.rgb(colour)
@@ -219,11 +200,11 @@ class ClockTimer():
 		while True:
 			if self.state == 'finished':
 				if self.state == 'finished':
-					self.rgb(self.display.RED())
-				await asyncio.sleep(0.5)
+					await self.display.show('{RED}Done')
+				await asyncio.sleep(1)
 				if self.state == 'finished':
-					self.rgb(self.display.GREEN())
-				await asyncio.sleep(0.5)
+					await self.display.show('{GREEN}Done')
+				await asyncio.sleep(1)
 			await asyncio.sleep(0)
 	
 	async def state_machine(self,b_set,b_start):
@@ -235,8 +216,8 @@ class ClockTimer():
 				if self.state=='clock_on' or self.state=='clock_off' :
 					self.clock.show=False
 					await  asyncio.sleep(1)
+					await self.display.show_time((0,0))
 					self.state='ready'
-					#self.mins,self.secs = 0,0
 				if self.state == 'timing' or self.state == 'timed':
 					if self.state == 'timing':
 						self.state = 'timed'
@@ -247,7 +228,6 @@ class ClockTimer():
 					await asyncio.sleep(.3)		
 					self.state = 'clock_on'
 				if self.state == 'finished':
-					#self.buzz.off()
 					await asyncio.sleep(.3)		
 					self.state = 'clock_on'
 
