@@ -5,7 +5,7 @@ An application to drive Unexpected Makers WOPR via a web interface.
 All testing and development has been done using Linux, Windows and Mac users 
 should be able to make appropriate modifications to get things going.
 
-###Installation
+## Installation
 
 First install an up-to-date version of micropython for whatever MCU
 you are using following instructions on the micropython download pages. 
