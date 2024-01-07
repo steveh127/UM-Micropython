@@ -55,9 +55,14 @@ will restart the setup procedure.
 ## Usage
 
 To show time press the right button on the front of the WOPR, the right button will
-toggle time display. The left button brings up the IP address.
+toggle time display. The left button brings up the IP address. 
+
+There are 2 small buttons behind the left end of the WOPR, the upper button(3) toggles 
+daylight saving, the lower button(4) toggles 24 / 12 hour clock. Setting changes are permanent
+and will survive rebooting.
 
 
-
-Again with your favourite browser, on any device connected to your local network,
+Again with your favourite browser, on any device connected to your local network, enter the
+displayed IP address into the address field. This brings up the WOPR website giving control of
+all features of the WOPR with a messaging facility. Clock settings changed will be retained. 
 
