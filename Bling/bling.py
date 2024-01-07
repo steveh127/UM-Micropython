@@ -276,7 +276,8 @@ class Bling_Display(NeoPixel):
 	def _show_string(self):
 		self.gap=1
 		self.fill(self.background)
-		text=self.text
+		text=self.get_keys(self.text)
+		#text=self.text
 		lt = self.length(text)
 		if lt > 38:
 			self.scrolling=True
@@ -330,7 +331,7 @@ class Bling_Display(NeoPixel):
 			self.justify=justify
 		if brightness is not None:
 			self.brightness=brightness
-		self.text=self.get_keys(text)
+		self.text=text
 		while self.text :
 			await asyncio.sleep(0)
 		if scroll:
@@ -344,7 +345,7 @@ class Bling_Display(NeoPixel):
 			self.justify=justify
 		if brightness is not None:
 			self.brightness=brightness
-		self.text=self.get_keys(text)
+		self.text=text
 		self._show_string()
 			
 	#used when scrolling longer text blocks 

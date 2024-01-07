@@ -1,18 +1,20 @@
 '''
-Driver program for a kitchen clock / timer.
+Driver program for a kitchen clock / timer, adapted for UM Bling!.
 
-Hardware requiself.display.RED():
+Hardware required:
+
+UM Bling!
+
+board has all necessary stuff:
 
 Network capable MCU running micropython. .
 Display with a driver having a show_time funcion that takes a time tuple (min,secs or hour/min)
 and displays it, with no arguments show_time blanks the display.
-2 buttons, set and start, active low.
-Single RGB neopixel.
-Buzzer.
+4 buttons, 2 used: set (top left) and start(top right), active high.
 
 Network is only used to set time. 
 
-Functionality.
+Functionality:
 
 Starts in clock mode. Clock display can be toggled with 'Start' button.
 
@@ -27,9 +29,6 @@ pressed which holds display. Pressing Set again returns to clock.
 
 Pressing Start when timing pauses timer, can restart timing with Start or return to Clock
 with Set. 
-
-Tested with Seed Studio XIAO ESP32 C3. 
-Display used was a 4 character 7 segment LED driven via an TM1637
 
 '''
 
@@ -117,12 +116,12 @@ class Clock(Network_Tools):
 			await asyncio.sleep(1)
 
 class ClockTimer():
-	#show_time is a function that takes a time tuple (min,secs) and updates a display,  
+	#show_time is a function that takes a time tuple (min,secs) and updates display,  
 	
 	def __init__(self,mins=0,secs=0):
 		self.display=Bling_Display()
 		self.display.setup_tasks()
-		self.display.show_string('{RED}Bling{GREEN}!')
+		self.display.show_string('{RED}B{PURPLE}ling{GREEN}!')
 		self.show_time = self.display.show_time
 		self.__mins = mins
 		self.__secs = secs
@@ -154,7 +153,7 @@ class ClockTimer():
 		if state == 'running' or state == 'timing':
 			self.rgb(self.display.GREEN())
 		if state == 'finished' or state == 'timed':
-			self.rgb(self.display.RED())	
+			self.rgb(self.display.GREEN())	
 		
 	def _toggle(self,colour):
 		if self.secs % 2:
@@ -192,7 +191,7 @@ class ClockTimer():
 						m += 1
 					self.secs = s
 					self.mins = m
-					self._toggle(self.display.GREEN())
+					self._toggle(self.display.BLUE())
 			await asyncio.sleep(0)
 	
 	#flashes an LED and beeps while 'finished' 			

@@ -1,0 +1,72 @@
+body{
+	font-family: sans-serif;
+	font-size: 12pt;
+	}
+	
+#form{
+	background-color: LightBlue;
+	
+	}
+	
+#title{
+	background-color: Purple;
+	font-family: serif;
+	color: LightBlue;
+	}
+
+td{
+	padding:20px;                                                                                                         	
+	}
+	
+
+button{
+	background-color: red;
+	color: white;
+	}
+	
+.integer_input{
+	background-color: LightGreen;
+	}
+	
+label#test label.rc{
+	background-color: yellow;
+	color: blue;
+	}
+		
+#rc{
+	background-color: yellow;
+	color: red;
+	}
+	
+#rc label{
+	background-color: green;
+	color: white
+	}
+	
+#rc button{
+	background-color: purple;
+	color: white;
+	font-size: 16pt;
+	}
+		
+#rc h4{
+	background-color: blue;
+	color: white
+	}
+	
+.fred{
+	background-color: red;
+	}
+
+h4.fred{
+	background-color: pink;
+	}
+	
+#drp_col option,label,button{
+	font-size:16pt
+	}
+
+#data{
+	background-color: pink;
+	}
+	
