@@ -1,13 +1,11 @@
 # Micropython WOPR Web Link
 
-#WOPR
-
-An application to drive Unexpected Makers WOPR via a web interace.
+An application to drive Unexpected Makers WOPR via a web interface.
 
 All testing and development has been done using Linux, Windows and Mac users 
 should be able to make appropriate modifications to get things going.
 
-## Installation
+###Installation
 
 First install an up-to-date version of micropython for whatever MCU
 you are using following instructions on the micropython download pages. 
@@ -15,7 +13,7 @@ The installation has been tested with, and build scripts are available
 for UM Tiny S2 and S3 boards.
 
 The clone these UM-Micropython directories from Github:  [https://github.com/steveh127/UM-Micropython](https://github.com/steveh127/UM-Micropython)
-This will include the Bling! software, the bling dirctory but not common 
+This will include the Bling! software, the bling directory but not common 
 can safely be deleted if not required.
 
 You will need mpremote installed as the build scripts require it. Also
@@ -26,4 +24,40 @@ Navigate to the WOPR directory and with the WOPR connected run the appropriate
 bash build script. (*./builder_S3 or S2*)
 
 ## Setup
+
+Reboot the WOPR and you should see the IP address 192.168.4.1 displayed.
+
+Go to wifi connections on any suitable device, and Android Phone or Tablet 
+are fine and you should see, under Networks available'WOPR'. Connect to this
+network, it needs no password and provides no internet connections. It is connecting
+to a web server running on the WOPR. On connecting it may well tell you it is
+not connected to the internet nor is it secure. You will only connect briefly
+so security should not be an issue:
+
+Now open you favourite browser on the device connected to WOPR and enter the IP
+address shown on the WOPR.
+
+This should bring up a web page. An attempt should is made to detect your WIFI 
+network and display the SSID, if it is incorrect edit the SSID field. Fill in
+the password field. Select other options as appropriate. Daylight saving option
+only works if there is no UTC offset (software written in UK, GMT = UTC).
+
+Once settings are correct press 'Save Setup' button. The WOPR should say 
+'RESTART NOW'. Do so. You should find whatever you used to connect to WOPR is
+now back to your local network. If not manually reconnect it.
+
+On restarting you should see an IP address.
+
+Should you not or you wish to reconfigure the network you will need to copy
+the net_config.py file in the common directory onto the MCU and reboot. This
+will restart the setup procedure. 
+
+## Usage
+
+To show time press the right button on the front of the WOPR, the right button will
+toggle time display. The left button brings up the IP address.
+
+
+
+Again with your favourite browser, on any device connected to your local network,
 
