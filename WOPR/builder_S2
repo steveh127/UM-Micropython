@@ -13,4 +13,4 @@ for F in $(ls)
 do
 	mpremote cp "$F" :
 done
-cd WOPR
+cd ../WOPR
