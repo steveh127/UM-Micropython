@@ -1,4 +1,4 @@
-#defines dashboard actions
+#defines web page actions
 from web_builder import clean_text
 from wopr_as import get_WOPR
 
