@@ -3,8 +3,11 @@ import network
 from socket_simple import Socket
 import uasyncio as asyncio
 
+#the next two imports define the application
 from wopr_as import get_WOPR
 from web_pages import links
+############################################
+
 from net_config import SSID
 
 def extract(request):	
@@ -74,12 +77,13 @@ else:
 	get_web_page = current_web_page(links)
 	html = Socket(('',80))
 	async def main():
+		#do application specific setup
 		wopr=get_WOPR()
 		wopr.IP=html.ip
 		wopr.show_IP=True
 		wopr.set_time()
-		#setup action tasks
 		await wopr.check()
+		###############################
 		asyncio.create_task(html.listen())
 		asyncio.create_task(html.process_data(web_write))
 		while True:

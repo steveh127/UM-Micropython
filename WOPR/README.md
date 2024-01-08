@@ -2,8 +2,11 @@
 
 An application to drive Unexpected Makers WOPR via a web interface.
 
-All testing and development has been done using Linux, Windows and Mac users 
+All testing and development has been done using Linux. Windows and Mac users 
 should be able to make appropriate modifications to get things going.
+
+This software, while an application as it stands, is intended as a framework
+to be modified for more specific applications.
 
 ## Installation
 
@@ -21,7 +24,8 @@ strongly recommended as basic development tool when working with
 micropython. (_pip install mpremote_)
 
 Navigate to the WOPR directory and with the WOPR connected run the appropriate
-bash build script. (*./builder_S3 or S2*)
+bash build script. (*./builder_S3 or S2*) The build script will need to be 
+set as exectable.
 
 ## Setup
 
@@ -68,3 +72,19 @@ displayed IP address into the address field. This brings up the WOPR website giv
 all features of the WOPR with a messaging facility. Clock settings changed will be retained. 
 
 ## Technical Notes
+
+The objective of this section is to indicate something of the structure of the program and to
+indicate where customisations may readily be made.
+
+### *web_link.py* This is the main driver file for the program, imported by *main.py*. It contains the
+subroutines to manage webpages, linking form actions to actual actions. This is commented to
+indicate the application specific areas that can be modified. The format of the imports is
+important, *get_WOPR* is a function that delivers a unique instances of the WOPR control class. The
+*web_pages* links is dictionary of links used to aid creation of web pages dynamically. *async def main()* sets
+up the WOPR software and creates all necessary tasks, these can be modified as necessary. 
+Finaly it initiates an endless asyncio loop. If there is no SSID defined then an alternative program, *net_setup.py* 
+is imported. This is essentially a version of *web_link.py* to run the network setup web page with it's own set
+of files. It is only imported if needed.
+
+
+ 
