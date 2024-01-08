@@ -76,14 +76,18 @@ all features of the WOPR with a messaging facility. Clock settings changed will 
 The objective of this section is to indicate something of the structure of the program and to
 indicate where customisations may readily be made.
 
-### *web_link.py* This is the main driver file for the program, imported by *main.py*. It contains the
+### *web_link.py* 
+
+This is the main driver file for the program, imported by *main.py*. It contains the
 subroutines to manage webpages, linking form actions to actual actions. This is commented to
 indicate the application specific areas that can be modified. The format of the imports is
 important, *get_WOPR* is a function that delivers a unique instances of the WOPR control class. The
-*web_pages* links is dictionary of links used to aid creation of web pages dynamically. *async def main()* sets
-up the WOPR software and creates all necessary tasks, these can be modified as necessary. 
-Finaly it initiates an endless asyncio loop. If there is no SSID defined then an alternative program, *net_setup.py* 
-is imported. This is essentially a version of *web_link.py* to run the network setup web page with it's own set
+*web_pages* links is dictionary of links used to aid creation of web pages dynamically. __*async def main()*__ sets
+up the WOPR software and creates all necessary tasks, these should be modified as necessary. 
+Finaly *async def main()* initiates an endless asyncio loop. 
+
+If there is no SSID defined in *net_config.py* then an alternative program, *net_setup.py* 
+is imported. This is essentially a version of *web_link.py* to run the network setup web page with its own set
 of files. It is only imported if needed.
 
 
