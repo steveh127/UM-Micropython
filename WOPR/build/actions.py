@@ -74,10 +74,6 @@ class Actions():
 			
 	def toggle_Summer(self,values):
 		self.wopr.daylight_saving = not self.wopr.daylight_saving
-		# if self.wopr.daylight_saving:
-			# self.wopr.daylight_saving = False 
-		# else:
-			# self.wopr.daylight_saving = True
 		self.wopr.save_config()
 			
 	def show_temp(self,values):

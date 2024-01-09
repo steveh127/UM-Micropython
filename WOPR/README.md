@@ -1,6 +1,6 @@
 # Micropython WOPR Web Link
 
-An application to drive Unexpected Makers WOPR via a web interface.
+An application to drive [Unexpected Makers WOPR](https://unexpectedmaker.com/shop.html#!/W-O-P-R-Display-Kit/p/578899083/) via a web interface.
 
 All testing and development has been done using Linux. Windows and Mac users 
 should be able to make appropriate modifications to get things going.
@@ -91,10 +91,31 @@ the network setup web page with its own set of files. It is only imported if nee
 
 #### *socket_simple*
 
-This is used by *web_link.py* to create a socket, connecting to the network if necessary. It asyncio co-routines
+This is used by *web_link.py* to create a socket, connecting to the network if necessary. It uses *asyncio* coroutines
 to listen for connections and take a supplied action on receiving a connection. The network connection will set the
 socket status to either 'connected' or 'disconnected'. It will try for about a minute to connect. This status should
 be checked before trying to use the socket.
 
+### *wopr_as.py*
 
+This creates the software to drive the hardware. It consists of two classes, the main WOPR class and a supporting 
+RGB class used to manage the 5 LEDs on the WOPR. An instance of the WOPR class with a basic asyncio driver and a network
+connection will act as a standalone program, as it is only controlling the clock and displaying IP address. The network is
+only neede by WOPR to set the clock. The *active_WOPR* closure is used to create a function, *get_WOPR* that delivers a 
+singleton instance of WOPR. This simplifies accessing WOPR from both *web_link* and the *actions* class that links WOPR with
+web controls. Adding additional functionality should be fairly straigtforward, an obvious possibility is adding alarm or
+timer functions. It certainly be possible to simulate the original WOPR from the movie *War Games*. It is also possible, 
+as some spare pins are broken out to connect to additional hardware such as sensors or motors. This software could also act a
+framework to connect to different hardware - anything with LEDs, buttons and a display will need similiar functionality. The
+only board specific file is *board.py* which provides pin mappings for the RGB LEDS, buzzer and buttons. The I2C interface is
+common across the Unexpected Maker boards compatible with WOPR.
+
+#### *led_multi_as.py*
+
+The WOPR display consists of twelve 14 segment LED arrays that provide an attractive, if retro, display. They are driven,
+via an I2C interface, by three HT16K33 chips. The micropython driver for these chips provides basic access which the LED_Multi_AS
+class provides higher level functionality such as a character set and *asyncio* display routines. There are different ways
+the LEDs can be connected to the chips so the character set is vendor dependent. The mapping here, shown in comments in module,
+works for both WOPR and for similiar Adafruit 4 LED displays but apparently identical Sparkfun displays have a radically different
+mapping. The obvious practical tweaks here are to modify or extend the character set. For further details see comments in module.   
  

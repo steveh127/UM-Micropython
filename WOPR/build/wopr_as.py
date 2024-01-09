@@ -179,7 +179,7 @@ class WOPR():
 		self.buzzer.deinit()
 		self.to_beep=False		
 			
-	#coroutines as tasks 	
+	#coroutines run as asyncio tasks 	
 	async def check_pressed(self,button_number):
 		while True:
 			if self.buttons[button_number].value() == 1:
@@ -263,13 +263,13 @@ class WOPR():
 				self.set_time()
 			await asyncio.sleep(1)
 		
-	async def start_clock(self):
+	def start_clock(self):
 		self.clock_running=True
 	
-	async def stop_clock(self):
+	def stop_clock(self):
 		self.clock_running=False
 		
-	async def toggle_clock(self):
+	def toggle_clock(self):
 		self.clock_running = not self.clock_running
 		if not self.clock_running:
 			self.display.clear()

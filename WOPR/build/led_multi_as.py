@@ -3,7 +3,7 @@ import asyncio
 
 '''
 class to manage multiple 4 character 15 bit LED displays controlled by multiple HT16K33 chips.
-Character mapping is as for Adafruit Feather displays.
+Character mapping is as for Adafruit Feather displays and Unexpected Makers WOPR.
 
 async version.
 
@@ -21,13 +21,15 @@ Second Byte is Inner Diagonals, Middle Line and Decimal Point(64)
           8              8   16   32  .64
           
 
-'show' takes a number or a string .
+This requires the asyncio tasks in setup_tasks to be running. 
 
-'show' can be L,R or C justified. L is default.
+'show' coroutine displays whatever is supplied in 'value'. Strings longer than 12 characters will be trimmed.
 
-All the above methods are just updating the display buffer, to display them use the 'update' method.
+'scroll' coroutine displays whatever is supplied in 'scroll_string' and requires the 'scrolling' flag set to True,
+any length string can be supplied.
 
-There is also a 'scroll' method which requires a string. Scrolling is L to R.
+'stream' coroutine displays whatever is supplied by 'source' which delivers a charater at a time and requires the 'streaming'
+ flag set to True. 
 
 'show_time' is provided for compatibility with KCLOCK. time is supplied as a tuple and called without
 argument clears display. Default justification is C
@@ -152,9 +154,11 @@ class LED_Multi_AS():
 				self.value=None
 			await asyncio.sleep(0.1)
 	
+	#does nothing if no source function provided
+	#source() should deliver a single character when called
 	async def stream(self):
 		while True:
-			if self.streaming:
+			if self.streaming and self.source:
 				if self.scrolling:
 					self.scrolling=False
 					while not self._scroll_done:
@@ -172,7 +176,7 @@ class LED_Multi_AS():
 				self._scroll_done=True
 			await asyncio.sleep(0.2)
 						
-	#any length string can be supplied - includes 'update'
+	#any length string can be supplied
 	async def scroll(self):
 		while True:
 			if self.scrolling:
