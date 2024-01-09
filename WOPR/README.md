@@ -53,9 +53,8 @@ now back to your local network. If not manually reconnect it.
 On restarting you should see an IP address and get a beep if the optional audio shield
 is present.
 
-Should you not see an IP address or you wish to reconfigure the network you will need to copy
-the net_config.py file in the common directory onto the MCU and reboot. This
-will restart the setup procedure. 
+Should the WOPR fail to connect to the network after trying for about a minute there will
+be a 'NO NETWORK REBOOT NOW' message. On rebooting repeat setup procedure above. 
 
 ## Usage
 
@@ -68,7 +67,7 @@ and will survive rebooting.
 
 
 Again with your favourite browser, on any device connected to your local network, enter the
-displayed IP address into the address field. This brings up the WOPR website giving control of
+displayed IP address into the address field. This brings up the WOPRs website giving control of
 all features of the WOPR with a messaging facility. Clock settings changed will be retained. 
 
 ## Technical Notes
@@ -87,8 +86,15 @@ up the WOPR software and creates all necessary tasks, these should be modified a
 Finaly *async def main()* initiates an endless asyncio loop. 
 
 If there is no SSID defined in *net_config.py* then an alternative program, *net_setup.py* 
-is imported. This is essentially a version of *web_link.py* to run the network setup web page with its own set
-of files. It is only imported if needed.
+is imported. This is essentially a version of *web_link.py*  that creates its own access point to run 
+the network setup web page with its own set of files. It is only imported if needed.
+
+#### *socket_simple*
+
+This is used by *web_link.py* to create a socket, connecting to the network if necessary. It asyncio co-routines
+to listen for connections and take a supplied action on receiving a connection. The network connection will set the
+socket status to either 'connected' or 'disconnected'. It will try for about a minute to connect. This status should
+be checked before trying to use the socket.
 
 
  
