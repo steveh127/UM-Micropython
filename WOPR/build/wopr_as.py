@@ -9,7 +9,7 @@ from led_multi_as import LED_Multi_AS
 from config import DS,HR24,OFFSET
 
 '''
-class to manage Unexpected Makers WOPR display which has 12 15 bit LED displays controlled by 3 HT16K33 chips.
+classes to manage Unexpected Makers WOPR display which has 12 15 bit LED displays controlled by 3 HT16K33 chips.
 also controls RGB neopixel array, buttons and buzzer.
 
 asyncio version
@@ -231,6 +231,7 @@ class WOPR():
 				break
 				
 	async def clock(self):
+		count=0
 		while True:		
 			if self.clock_running:
 				yr,mnth,day,hr,mn,sec,_,_ = localtime()
@@ -255,6 +256,11 @@ class WOPR():
 				if not self.twenty4 and hr < 10:
 					time[0] = ' ' + time[0][1]
 				self.display.value = '  ' + time[0] + '-' + time[1] + '-' + time[2]
+			#reset time every 12 hours
+			count += 1
+			if count == 60 * 60 * 12:
+				count=0
+				self.set_time()
 			await asyncio.sleep(1)
 		
 	async def start_clock(self):

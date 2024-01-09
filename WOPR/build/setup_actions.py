@@ -7,27 +7,10 @@ import network
 class Actions():	
 	def __init__(self):
 		self.wopr=get_WOPR()
-		self.wopr.rgb_led1.colour=self.wopr.WHITE
-		self.wopr.rgb_led2.colour=self.wopr.GREEN
-		self.wopr.rgb_led3.colour=self.wopr.BLUE
-		self.wopr.rgb_led4.colour=self.wopr.YELLOW
-		self.wopr.rgb_led5.colour=self.wopr.RED
 		self.SSID=''
 		self.PSWD=''
 		self.wopr.display._show('192.168.4.1',justify='C')
 		self.wopr.display.update()
-			
-	def show_colour(self,values):
-		self.wopr.rgb_led1.on() if 'White' in values else self.wopr.rgb_led1.off()
-		self.wopr.rgb_led2.on() if 'Green' in values else self.wopr.rgb_led2.off()
-		self.wopr.rgb_led3.on() if 'Blue'  in values else self.wopr.rgb_led3.off()
-		self.wopr.rgb_led4.on() if 'Yellow'in values else self.wopr.rgb_led4.off()
-		self.wopr.rgb_led5.on() if 'Red'   in values else self.wopr.rgb_led5.off()
-		
-	def beep_now(self,values):
-		self.wopr.buzzer.init(self.wopr.beep_freq)
-		sleep(self.wopr.beep_length) 
-		self.wopr.buzzer.deinit()
 	
 	def save_config(self,values):
 		self.SSID=values['SSID'][0]

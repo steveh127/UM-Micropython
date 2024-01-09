@@ -5,7 +5,7 @@ import asyncio
 class Socket():
 	def __init__(self,address):
 		self.target,self.port = address
-		self._get_network()
+		self.status = self._get_network()
 		self.conn=None
 		self.data=None
 	
@@ -19,7 +19,8 @@ class Socket():
 		from time import sleep
 		net = network.WLAN(network.STA_IF)
 		net.active(True)
-		while True:
+		#try to connect for a minute
+		for _ in range(600):
 			try:
 				net.connect(SSID,PSWD)
 			except:
@@ -27,9 +28,13 @@ class Socket():
 			sleep(0.1)		
 			if net.isconnected():
 				break
+		else:
+			print('Connection failed')
+			return 'disconnected'
 		print('Connection successful')
 		print(net.ifconfig()[0])
 		self.ip = net.ifconfig()[0]
+		return 'connected'
 		
 	def send(self,payload,target=None):
 		if self.conn:

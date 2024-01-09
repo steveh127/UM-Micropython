@@ -73,21 +73,36 @@ if not SSID:
 	import net_setup
 
 else:
-	
-	get_web_page = current_web_page(links)
 	html = Socket(('',80))
-	async def main():
-		#do application specific setup
+	if html.status == 'disconnected':
+		with  open('net_config.py','w') as net_config:
+			net_config.write('SSID=\'\'\n')
+			net_config.write('PSWD=\'\'\n')
+		from time import sleep
 		wopr=get_WOPR()
-		wopr.IP=html.ip
-		wopr.show_IP=True
-		wopr.set_time()
-		await wopr.check()
-		###############################
-		asyncio.create_task(html.listen())
-		asyncio.create_task(html.process_data(web_write))
 		while True:
-			await asyncio.sleep(10)
-		
-	asyncio.run(main())
+			wopr.display.clear()
+			wopr.display._show('NO NETWORK')
+			wopr.display.update()
+			sleep(1)
+			wopr.display.clear()
+			wopr.display._show('RESTART NOW')
+			wopr.display.update()
+			sleep(1)
+	else:
+		get_web_page = current_web_page(links)
+		async def main():
+			#do application specific setup
+			wopr=get_WOPR()
+			wopr.IP=html.ip
+			wopr.show_IP=True
+			wopr.set_time()
+			await wopr.check()
+			###############################
+			asyncio.create_task(html.listen())
+			asyncio.create_task(html.process_data(web_write))
+			while True:
+				await asyncio.sleep(10)
 			
+		asyncio.run(main())
+				
