@@ -6,7 +6,9 @@ All testing and development has been done using Linux. Windows and Mac users
 should be able to make appropriate modifications to get things going.
 
 This software, while an application as it stands, is intended as a framework
-to be modified for more specific applications.
+to be modified for more specific applications. As far as I am concerned this is 
+a completed piece of work and I don't intend developing it further. Feel free to
+clone and modify the code as much as you like.
 
 ## Installation
 
@@ -15,7 +17,7 @@ you are using following instructions on the micropython download pages.
 The installation has been tested with, and build scripts are available 
 for UM Tiny S2 and S3 boards.
 
-The clone these UM-Micropython directories from Github:  [https://github.com/steveh127/UM-Micropython](https://github.com/steveh127/UM-Micropython)
+Then clone the UM-Micropython directories from Github:  [https://github.com/steveh127/UM-Micropython](https://github.com/steveh127/UM-Micropython)
 This will include the Bling! software, the bling directory but not common 
 can safely be deleted if not required.
 
@@ -32,7 +34,8 @@ set as exectable.
 Reboot the WOPR and you should see the IP address 192.168.4.1 displayed.
 
 Go to WiFi connections on any suitable device, an Android Phone or Tablet 
-are fine and you should see, under Networks available 'WOPR'. Connect to this
+are fine and you should see, under Networks available 'ORAC' (ORAC is another fictional
+computer that should be familiar to fans of 70's UK SCi-Fi). Connect to this
 network, it needs no password and provides no internet connections. It is connecting
 to a web server running on the WOPR. On connecting it may well tell you it is
 not connected to the internet nor is it secure. You will only connect briefly
@@ -119,3 +122,37 @@ the LEDs can be connected to the chips so the character set is vendor dependent.
 works for both WOPR and for similiar Adafruit 4 LED displays but apparently identical Sparkfun displays have a radically different
 mapping. The obvious practical tweaks here are to modify or extend the character set. For further details see comments in module.   
  
+### *web_pages.py* & *setup_pages.py*
+
+These modules define the web pages created dynamically for display and the actions to be performed. The classes used for this
+are set up in the *web_builder.py* module. Don't expect to create anything too complex, this is about using web pages for
+'dashboard' control of devices. The basic structure for a web page is a title, a body, an action map, and a CSS file, here *dash.css*. 
+The body contains a display list and a form, both the latter consist primarily of lists of widgets. The *web_pages* used to control
+WOPR have examples of all the widgets available. Using the WOPR pages as a template it shouldn't be too dificult to create new
+web pages. The actions driven by the forms are defined in the *actions.py* module, see below. Note that forms can either have a 
+single, possibly complex, action with a single submit button that delivers all form fields or can have a set of submit buttons 
+for each widget to do specific actions. The *setup_pages* uses a single button to save the defined configuration parameters while 
+*web_pages* has seperate submit buttons for each widget. The final element in the web_pages module is a dictionary of links that
+connects link names to web_page classes. This must include a 'home' link name. This is imported by *web_link* to control web
+page generation. Note that web_pages and web_builder and the parts of web_link not associated with WOPR are pure Python and run
+just fine on standard Python (3.x), initial development was done on Linux. It is also worth noting that the *net_setup*,
+*setup_pages* have no links to WOPR and can be run independently, *setup_actions* will need modifying to display appropriate 
+messages to the display.
+
+#### *dash.css*
+
+This is a perfectly standard CSS file and can be modified as required, if necessary widgets can have an ID defined. Strictly 
+speaking there's no cascading going on, the style is simply embedded in the header of each web_page.
+
+
+#### *actions.py* & *setup_actions.py*
+ 
+These modules link the web page form widget actions to the underlying hardware. The format is fairly simple, each action method must 
+have the arguments *(self,values)*, even if no values are generated. Methods to simply deliver information for use in form fields
+are also possible. See module files for examples; they are used to populate form fields with current values for example.
+
+ 
+### Security
+
+The build includes a *net_config.py* file that contains local network parameters in clear text. Anyone with minimal micropython 
+skills and access to the hardware could read this file. 
