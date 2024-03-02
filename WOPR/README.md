@@ -27,7 +27,7 @@ micropython. (_pip install mpremote_)
 
 Navigate to the WOPR directory and with the WOPR connected run the appropriate
 bash build script. (*./builder_S3 or S2*) The build script will need to be 
-set as exectable.
+set as executable.
 
 ## Setup
 

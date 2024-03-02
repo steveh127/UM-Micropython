@@ -1,0 +1,16 @@
+cd build
+for F in $(ls)
+do
+	mpremote cp "$F" :
+done
+cd ../tiny_pico
+for F in $(ls)
+do
+	mpremote cp "$F" :
+done
+cd ../../common
+for F in $(ls)
+do
+	mpremote cp "$F" :
+done
+cd ../WOPR

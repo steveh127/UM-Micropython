@@ -256,9 +256,9 @@ class WOPR():
 				if not self.twenty4 and hr < 10:
 					time[0] = ' ' + time[0][1]
 				self.display.value = '  ' + time[0] + '-' + time[1] + '-' + time[2]
-			#reset time every 12 hours
+			#reset time every hour
 			count += 1
-			if count == 60 * 60 * 12:
+			if count == 60 * 60:
 				count=0
 				self.set_time()
 			await asyncio.sleep(1)
