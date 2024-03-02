@@ -15,7 +15,7 @@ clone and modify the code as much as you like.
 First install an up-to-date version of micropython for whatever MCU
 you are using following instructions on the micropython download pages. 
 The installation has been tested with, and build scripts are available 
-for UM Tiny S2 and S3 boards.
+for UM Tiny S2, S3 and Tiny Pico boards.
 
 Then clone the UM-Micropython directories from Github:  [https://github.com/steveh127/UM-Micropython](https://github.com/steveh127/UM-Micropython)
 This will include the Bling! software, the bling directory but not common 
@@ -26,7 +26,7 @@ strongly recommended as basic development tool when working with
 micropython. (_pip install mpremote_)
 
 Navigate to the WOPR directory and with the WOPR connected run the appropriate
-bash build script. (*./builder_S3 or S2*) The build script will need to be 
+bash build script. (*./builder_S3, builder_S2 or builder_tp*) The build script will need to be 
 set as executable.
 
 ## Setup
@@ -47,7 +47,7 @@ address shown on the WOPR(192.168.4.1).
 This should bring up a web page. An attempt is made to detect your WiFi 
 network and display the SSID, if it is incorrect edit the SSID field. Fill in
 the password field. Select other options as appropriate. Daylight saving option
-only works if there is no UTC offset (software written in UK, GMT = UTC).
+only works if there is no UTC offset (software written in UK so GMT = UTC).
 
 Once settings are correct press 'Save Setup' button. The WOPR should say 
 'RESTART NOW'. Do so. You should find whatever you used to connect to WOPR is
@@ -108,7 +108,7 @@ only neede by WOPR to set the clock. The *active_WOPR* closure is used to create
 singleton instance of WOPR. This simplifies accessing WOPR from both *web_link* and the *actions* class that links WOPR with
 web controls. Adding additional functionality should be fairly straigtforward, an obvious possibility is adding alarm or
 timer functions. It certainly be possible to simulate the original WOPR from the movie *War Games*. It is also possible, 
-as some spare pins are broken out to connect to additional hardware such as sensors or motors. This software could also act a
+as some spare pins are broken out, to connect to additional hardware such as sensors or motors. This software could also act a
 framework to connect to different hardware - anything with LEDs, buttons and a display will need similiar functionality. The
 only board specific file is *board.py* which provides pin mappings for the RGB LEDS, buzzer and buttons. The I2C interface is
 common across the Unexpected Maker boards compatible with WOPR.
