@@ -35,7 +35,7 @@ async def b1():
 	await display.show_time((15,32))
 	
 async def b2():
-	await display.show('{RED}1{GREEN}23{BLUE}{NO GAP}45{WHITE}678{NO GAP}{RED}9&{YELLOW}1{GREEN}23{PURPLE}45',brightness=3)
+	await display.show('{RED}1{GREEN}23{BLUE}{NO GAP}45{WHITE}678 test',brightness=3)
 	
 async def b3():
 	if display.background == display.BLACK(1):
@@ -48,7 +48,7 @@ async def main():
 	buttons=Bling_Buttons([b0,b1,b2,b3])
 	display.setup_tasks()
 	asyncio.create_task(buttons.check())
-	await display.show('{RED}Testing {BLUE}{NO GAP}123{GREEN}{GAP}4 5 6 ',brightness=3)
+	await display.show('{RED}Test')
 	while True:
 		await asyncio.sleep(5)
 	

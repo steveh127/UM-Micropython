@@ -9,6 +9,12 @@ a wealth of information including schematics.
 The micropython [Unexpected Maker Tiny S3 micropython build](https://micropython.org/download/UM_TINYS3/) has been 
 used for development.
 
+This respository contains:
+
+bling.py, a micrppython module providing classes to control Bling display and buttons.
+demo.py, a program to demonstrate some Bling! functionality
+kclock, a kitchen clock and timer.
+
 
 ## Display
 
@@ -24,6 +30,7 @@ class = Bling_Display
 
 ## To Do
 
+kclock:
 
- 								
+expand to include I2S playback from SD card = leveraging existing code. 								
 								

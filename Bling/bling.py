@@ -276,9 +276,9 @@ class Bling_Display(NeoPixel):
 	def _show_string(self):
 		self.gap=1
 		self.fill(self.background)
-		text=self.get_keys(self.text)
+		self.text=self.get_keys(self.text)
 		#text=self.text
-		lt = self.length(text)
+		lt = self.length(self.text)
 		if lt > 38:
 			self.scrolling=True
 		else:
@@ -290,7 +290,7 @@ class Bling_Display(NeoPixel):
 					column = 39 - lt
 			else:
 				column=1
-			for ch in text:
+			for ch in self.text:
 				width = self.show_char(ch,column,self.colour) + self.gap
 				if width > self.gap:
 					column += width							
