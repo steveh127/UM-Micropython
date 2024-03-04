@@ -1,4 +1,4 @@
-cd kclock
+cd KClock
 for F in $(ls)
 do
 	mpremote cp "$F" :

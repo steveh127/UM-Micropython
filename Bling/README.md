@@ -11,7 +11,7 @@ used for development.
 
 This respository contains:
 
-bling.py, a micrppython module providing classes to control Bling display and buttons.
+bling.py, a micropython module providing classes to control Bling display and buttons.
 demo.py, a program to demonstrate some Bling! functionality
 kclock, a kitchen clock and timer.
 
