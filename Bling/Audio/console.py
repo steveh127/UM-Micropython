@@ -3,7 +3,7 @@ from machine import Pin,I2S,WDT
 import asyncio
 
 from board import BUTTONS,i2c
-from bling import Bling_Display
+from bling import Bling_Display,Bling_Buttons
 
 class Button():
 	def __init__(self,pin):

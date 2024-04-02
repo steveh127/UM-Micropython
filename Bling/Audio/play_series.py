@@ -88,7 +88,6 @@ class PlaySeries(Play_WAV,Console):
 		asyncio.create_task(self.play_next_episode())
 		await self.console_tasks()	
 		await self.display.show(self.title)
-		#await self.display_text('Start          ',3)
 		self.buttons[0].action=self.start_next
 		self.buttons[2].action=self.set_volume
 		while True:

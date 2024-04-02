@@ -1,5 +1,5 @@
 '''
-Kitchen Clock - tested with Seeed XIAO ESP32 C3
+Kitchen Clock
 
 '''
 from machine import Pin

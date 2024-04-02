@@ -455,7 +455,7 @@ class Bling_Display(NeoPixel):
 #class to handle buttons - must be supplied with a list of actions as coroutines.
 class Bling_Buttons():
 	def __init__(self,actions):
-		buttons=[11,10,33,34]
+		buttons=[11,33,10,34]
 		self.buttons=[[],[],[],[]]
 		for i,button in enumerate(buttons):
 			self.buttons[i]=(Pin(button,Pin.IN),actions[i])

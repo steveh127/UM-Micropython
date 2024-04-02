@@ -71,6 +71,7 @@ class Clock(Network_Tools):
 		self.set_time()
 		self.disconnect()
 		self.rtc=RTC()
+		self._set_ds()
 		self._get_time()
 		self.blank()
 		self.show=show
@@ -78,8 +79,28 @@ class Clock(Network_Tools):
 				
 	def _get_time(self):
 		self.yr,self.mn,self.dy,self.dow,self.hr,self.min,self.sec,_ = self.rtc.datetime()
-		self.datetime=(self.yr,self.mn,self.dy,self.hr,self.min)	
-	
+		self.datetime=(self.yr,self.mn,self.dy,self.hr,self.min)
+		if self.ds:
+			self.hr += 1
+			if self.hr == 24:
+				self.hr = 0				
+			
+	#sort out daylight saving - 4th Sunday in March & October		
+	def _set_ds(self):
+		(_,month,day,dow,_,_,_,_) = self.rtc.datetime()
+		if month in [11,12,1,2,3]:
+			self.ds = False
+		if month in [4,5,6,7,8,9,10]:
+			self.ds = True	
+		if month == 3 and dow == 6 and day > 24:
+			self.ds = True
+		if month == 3 and (day + (6 - dow)) > 30:
+			self.ds = True		
+		if month == 10 and dow == 6 and day > 24:
+			self.ds = False	
+		if month == 10 and (day + (6 - dow)) > 30:
+			self.ds = False
+			
 	async def show_time(self):
 		await self._show_time((self.hr,self.min))
 		
@@ -103,6 +124,10 @@ class Clock(Network_Tools):
 		showing=True
 		while True:
 			self._get_time()
+			#set time at midnight
+			if not (self.hr or self.min):
+				self.set_time()
+				self._set_ds()
 			if self.show:
 				if self.sec == 0 or not on:
 					on=True
