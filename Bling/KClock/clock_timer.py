@@ -33,7 +33,7 @@ with Set.
 '''
 
 import uasyncio as asyncio
-from machine import Pin, RTC
+from machine import Pin, RTC, WDT
 
 from net_tools import Network_Tools
 from bling import Bling_Display
@@ -119,10 +119,12 @@ class Clock(Network_Tools):
 			await asyncio.sleep(1)
 						
 	async def run(self):
+		wdt=WDT(timeout=5000)
 		self._get_time()
 		on = False
 		showing=True
 		while True:
+			wdt.feed()
 			self._get_time()
 			#set time at midnight
 			if not (self.hr or self.min):
@@ -153,7 +155,7 @@ class ClockTimer():
 		self.mins = mins
 		self.secs = secs
 		self.clock=Clock(self.show_time)
-		self.state= 'clock_on'
+		self.state= 'clock_off'
 		
 	def rgb(self,colour):
 		self.display.colour=colour
