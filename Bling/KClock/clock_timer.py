@@ -32,8 +32,8 @@ with Set.
 
 '''
 
-import uasyncio as asyncio
-from machine import Pin, RTC, WDT
+import asyncio
+from machine import Pin, RTC, WDT, PWM
 
 from net_tools import Network_Tools
 from bling import Bling_Display
@@ -227,6 +227,7 @@ class ClockTimer():
 			if self.state == 'finished':
 				if self.state == 'finished':
 					await self.display.show('{RED}Done')
+					await self.beep()
 				await asyncio.sleep(1)
 				if self.state == 'finished':
 					await self.display.show('{GREEN}Done')
@@ -234,6 +235,7 @@ class ClockTimer():
 			await asyncio.sleep(0)
 	
 	async def state_machine(self,b_set,b_start):
+		await self.beep()
 		while True:
 			if b_set.value():
 				if self.state == 'ready':
@@ -294,6 +296,14 @@ class ClockTimer():
 				s=self.secs
 				await self.show_time((m,s))
 			await asyncio.sleep(0.2)
+			
+	async def beep(self,freq=400,time=0.3,count=1,volume=100):
+		for i in range(count):
+			b=PWM(Pin(9),duty=0,freq=freq)
+			b.duty(volume)
+			await asyncio.sleep(time)
+			b.duty(0)
+			await asyncio.sleep(time)
 			
 	async def setup_tasks(self,b_set,b_start):
 		asyncio.create_task(self.new_time())

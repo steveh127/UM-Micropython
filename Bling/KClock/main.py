@@ -1,1 +1,1 @@
-import kclock
+import clock_timer
