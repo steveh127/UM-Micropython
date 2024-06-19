@@ -180,7 +180,10 @@ class ClockTimer():
 		if state == 'running' or state == 'timing':
 			self.rgb(self.display.GREEN())
 		if state == 'finished' or state == 'timed':
-			self.rgb(self.display.GREEN())	
+			self.rgb(self.display.GREEN())
+		if state == 'alarming':
+			self.rgb(self.display.BLUE())
+			self.clock.show=False	
 		
 	def _toggle(self,colour):
 		if self.secs % 2:
@@ -234,7 +237,7 @@ class ClockTimer():
 				await asyncio.sleep(1)
 			await asyncio.sleep(0)
 	
-	async def state_machine(self,b_set,b_start):
+	async def state_machine(self,b_set,b_start,b_hour,b_min):
 		await self.beep()
 		while True:
 			if b_set.value():
@@ -258,6 +261,9 @@ class ClockTimer():
 				if self.state == 'finished':
 					await asyncio.sleep(.3)		
 					self.state = 'clock_on'
+				if self.state == 'alarming':
+					self.state = 'clock_on'
+					await asyncio.sleep(.3)	
 
 			if b_start.value():
 				if self.state=='clock_on':
@@ -285,7 +291,27 @@ class ClockTimer():
 					else:
 						self.state = 'timing'
 					await asyncio.sleep(.3)
+				if self.state == 'alarming':
+					self.run_alarm()
+					self.state = 'clock_on'
+					await asyncio.sleep(.3)
+					
+			if b_hour.value():
+				if self.state != 'alarming' and (self.state == 'clock_on' or self.state == 'clock_off'): 
+					self.state = 'alarming'
+				await asyncio.sleep(.3)	
+				
 			await asyncio.sleep(0)
+	
+	def run_alarm(self):
+		print('ALARM SET to run HERE')
+	
+	async def setup_alarm(self):
+		while True:
+			while self.state == 'alarming':
+				print('setting alarm up')
+				await asyncio.sleep(1)
+			await asyncio.sleep(0.2)
 			
 	async def new_time(self):
 		m=self.mins
@@ -296,8 +322,8 @@ class ClockTimer():
 				s=self.secs
 				await self.show_time((m,s))
 			await asyncio.sleep(0.2)
-			
-	async def beep(self,freq=400,time=0.3,count=1,volume=100):
+	#volume value needs tweaking for different buzzers, 1023 active, 200 passive		
+	async def beep(self,freq=400,time=0.3,count=1,volume=1023):
 		for i in range(count):
 			b=PWM(Pin(9),duty=0,freq=freq)
 			b.duty(volume)
@@ -305,22 +331,26 @@ class ClockTimer():
 			b.duty(0)
 			await asyncio.sleep(time)
 			
-	async def setup_tasks(self,b_set,b_start):
+	async def setup_tasks(self,b_set,b_start,b_hour,b_min):
 		asyncio.create_task(self.new_time())
 		asyncio.create_task(self.count_down())
 		asyncio.create_task(self.count_up())
 		asyncio.create_task(self.finish())
-		asyncio.create_task(self.state_machine(b_set,b_start))
+		asyncio.create_task(self.state_machine(b_set,b_start,b_hour,b_min))
 		asyncio.create_task(self.clock.run())
+		asyncio.create_task(self.clock.check_alarms())
+		asyncio.create_task(self.setup_alarm())
 		
 ct=ClockTimer()
 
 b_set   = Pin(11,Pin.IN)
 b_start = Pin(33,Pin.IN)
+b_hour  = Pin(10,Pin.IN)
+b_min   = Pin(34,Pin.IN)
 
 async def main():
 	
-	await ct.setup_tasks(b_set,b_start)
+	await ct.setup_tasks(b_set,b_start,b_hour,b_min)
 	while True:
 		await asyncio.sleep(10)
 
