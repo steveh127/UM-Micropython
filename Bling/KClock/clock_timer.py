@@ -235,7 +235,7 @@ class ClockTimer():
 					await self.beep()
 				await asyncio.sleep(1)
 				if self.state == 'finished':
-					await self.display.show('{GREEN}')
+					await self.display.show('{GREEN}ALARM')
 					await self.beep()
 				await asyncio.sleep(1)
 			await asyncio.sleep(0)
@@ -305,8 +305,21 @@ class ClockTimer():
 			if b_hour.value():
 				if self.state != 'alarming' and (self.state == 'clock_on' or self.state == 'clock_off'): 
 					self.state = 'alarming'
-				await asyncio.sleep(.3)		
+					await asyncio.sleep(.3)
+				if self.state == 'finished':
+					self.state = 'clock_on'
+					await asyncio.sleep(.3)	
+								
+			if b_min.value():
+				if self.alarm:
+					print('show alarm value / clear alarm'):
+					await asyncio.sleep(.3)
+				if self.state == 'finished':
+					self.state = 'clock_on'
+					await asyncio.sleep(.3)							
 			await asyncio.sleep(0)
+			
+			
 	
 	def alarm_action(self):
 		print('ALARM')
@@ -325,7 +338,7 @@ class ClockTimer():
 	async def setup_alarm(self,b_hour,b_min):
 		while True:
 			if self.alarm:
-				self._toggle(self.display.BLUE())
+				self.rgb(self.display.BLUE())
 			if self.state == 'alarming':
 				self.mins,self.secs = 0,0
 				self.alarm_hr,self.alarm_min = self.mins,self.secs
