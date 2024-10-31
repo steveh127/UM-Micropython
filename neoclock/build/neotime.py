@@ -49,14 +49,20 @@ class Neo_time():
 		# 63,64,65,66,67,68,69,70,71,
 		# 72,73,74,75,76,77,78,79,80
 		# ]
+		self.H10 = [25,33,34,41,42,43,51,52,61]
+		self.H1  = [69,59,68,49,58,67,57,66,65]
+		self.M1  = [19,28,29,37,38,39,46,47,55]
+		self.M10 = [11,12,13,14,15,21,22,23,31]
 		#border
 		self.border = [0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,53,54,62,63,71,72,73,74,75,76,77,78,79,80]
 		#cross
 		self.cross  = [13,22,31,37,38,39,40,41,42,43,49,58,67]
+		#saltire
+		self.salt  = [10,20,30,40,50,60,70,16,24,32,48,56,64]
 		self.centre = 40
-		self.shapes = ('blocks','circles','random')
+		self.shapes = ('blocks','circles','random','triangles')
 		self.shape = SHAPE
-		for n in range(3):
+		for n in range(len(self.shapes)):
 			if self.shapes[n] == self.shape:
 				self.sn = n
 				break
@@ -75,29 +81,34 @@ class Neo_time():
 	
 	@shape.setter
 	def shape(self,value):
-		if value not in ('blocks','circles','random'):
+		if value not in self.shapes:
 			self.__shape = 'blocks'
 		else:
 			self.__shape = value
 		if self.__shape == 'blocks':
-			#led mapping for 9 x 9 neopixel array	
-			self.H10 = [14,15,16,23,24,25,32,33,34]
-			self.H1  = [50,51,52,59,60,61,68,69,70]
+			#led mappings for 9 x 9 neopixel array	
+			self.H10 = [50,51,52,59,60,61,68,69,70]
+			self.H1  = [14,15,16,23,24,25,32,33,34]
 			self.M1  = [46,47,48,55,56,57,64,65,66]
 			self.M10 = [10,11,12,19,20,21,28,29,30]
+		if self.__shape == 'triangles':
+			self.H10 = [11,12,13,14,15,21,22,23,31]
+			self.H1  = [69,59,68,49,58,67,57,66,65]
+			self.M1  = [19,28,29,37,38,39,46,47,55]
+			self.M10 = [25,33,34,41,42,43,51,52,61]
 		if self.__shape == 'circles':
 			self.H10 = [30,31,32,39,41,48,49,50]	
 			self.H1  = [20,21,22,23,24,29,33,38,42,47,51,56,57,58,59,60]
 			self.M10 = [10,11,12,13,14,15,16,19,25,28,34,37,43,46,52,55,61,64,65,66,67,68,69,70]
 			self.M1  = self.border
+		self.save_net_config()
 		
 	def next_shape(self):
 		self.sn += 1
-		if self.sn == 3:
+		if self.sn == 4:
 			self.sn = 0
 		self.shape = self.shapes[self.sn]
 		self.shape_changed = True
-		self.save_net_config()
 		
 	def save_net_config(self):
 		net_config = open('net_config.py','w')
@@ -216,7 +227,7 @@ class Neo_time():
 			if sec % 5 == 0 or self.shape_changed:
 				if self.shape_changed:
 						self.shape_changed = False
-				if self.shape in ('blocks','circles'):
+				if self.shape in ('blocks','circles','triangles'):
 					self.neo.fill((0,0,0))
 					self._shuffle(self.H10)
 					for n in range(self.h10):
@@ -235,6 +246,11 @@ class Neo_time():
 							self.neo[n] = BRD	
 						for n in self.cross:
 							self.neo[n] = CRS
+					if self.shape == 'triangles':
+						for n in self.border:
+							self.neo[n] = BRD	
+						# for n in self.salt:
+							# self.neo[n] = CRS
 					if self.shape == 'circles':
 						self.neo[self.centre] = CNT
 						if self.m1 == 0:
