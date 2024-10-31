@@ -6,8 +6,7 @@ from actions import Actions
 act=Actions()
 #if a form has a Submit widget only one method is required.
 actions_map={
-	'submit':act.submit,
-	'show':act.show
+	'submit':act.submit
 	}
 
 NAME = 'Clock'
@@ -20,7 +19,6 @@ setup = Web_page(
 			Paragraph('WiFi, Display and Time Setup'),
 			Paragraph('This is a one shot setup page. Be careful to set things up correctly. You can save multiple times but once clock is restarted settings are fixed.'),
 			Paragraph('An attempt is made to detect the best WiFi network. If this is not yours please correct.'),
-			Link('Try display formats.',link='test'),
 			
 		],		
 		form=Form(
@@ -46,34 +44,8 @@ setup = Web_page(
 	action_map=actions_map
 )
 
-test=Web_page(
-	title='Test Display',
-	body = Body(
-		display_list = [
-			Header('Test Display Formats',header=2,ID='title'),
-			Link('Reurn to save setup page',link='home'),
-			Paragraph("For 'blocks' hour digits are the upper blocks, minute digits the lower blocks. The same colours are used for the same digits in other formats."),
-			Paragraph('When running the display pattern for each digit changes randomly every 5 seconds for Blocks and circles every 10 seconds for Random.')		
-		],
-		form = Form(
-			[
-			Radio_buttons(
-							('blocks','circles','random'),
-							command='show',
-							value='blocks',
-							label='Clock Patterns:',
-							button_label='Show Pattern'
-			),
-			Paragraph('Once choice is made it will need setting on setup screen.')				
-			],
-			cols=1
-		),
-		cols=1
-	),
-	css_file   = 'dash.css',
-	action_map = actions_map
-)
+
 
 #links - matches commands to web pages, a 'home' page must be defined. 
 
-links = {'home':setup,'test':test}
+links = {'home':setup}

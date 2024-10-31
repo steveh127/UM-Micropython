@@ -22,7 +22,7 @@ from neopixel import NeoPixel
 import network
 import ntptime
 from random import randrange
-
+import sys
 
 from net_config import SSID,PSWD,SHAPE,H12,OFFSET
 from colour_config import H10C,H1C,M10C,M1C,BRD,CRS,M1Z,M10Z,H1Z,H10Z,CNT
@@ -54,7 +54,13 @@ class Neo_time():
 		#cross
 		self.cross  = [13,22,31,37,38,39,40,41,42,43,49,58,67]
 		self.centre = 40
+		self.shapes = ('blocks','circles','random')
 		self.shape = SHAPE
+		for n in range(3):
+			if self.shapes[n] == self.shape:
+				self.sn = n
+				break
+		self.shape_changed=False
 		#all but edges - fully random
 		self.full = [14,15,16,23,24,25,32,33,34,50,51,52,59,60,61,68,69,70,
 					 46,47,48,55,56,57,64,65,66,10,11,12,19,20,21,28,29,30,
@@ -85,7 +91,23 @@ class Neo_time():
 			self.M10 = [10,11,12,13,14,15,16,19,25,28,34,37,43,46,52,55,61,64,65,66,67,68,69,70]
 			self.M1  = self.border
 		
-
+	def next_shape(self):
+		self.sn += 1
+		if self.sn == 3:
+			self.sn = 0
+		self.shape = self.shapes[self.sn]
+		self.shape_changed = True
+		self.save_net_config()
+		
+	def save_net_config(self):
+		net_config = open('net_config.py','w')
+		net_config.write('SSID=\'' + SSID + '\'\n')
+		net_config.write('PSWD=\'' + PSWD + '\'\n')
+		net_config.write('SHAPE=\'' + self.shape + '\'\n')
+		net_config.write('H12=' + str(self.H12) + '\n')
+		net_config.write('OFFSET=' + str(self.UTC_offset) + '\n')
+		net_config.close()
+		
 	#shuffle elements of a list
 	def _shuffle(self,l):
 		n = len(l)
@@ -139,7 +161,7 @@ class Neo_time():
 			self.neo.write()
 			await asyncio.sleep(10)
 			self.rtc.datetime((2022,1,1,1,0,0,0,0))
-			return
+			sys.exit()
 		#set time from network
 		NTP_SERVER = '0.ch.pool.ntp.org'
 		ntptime.host = NTP_SERVER
@@ -149,6 +171,7 @@ class Neo_time():
 			try:
 				ntptime.settime()
 				print('Time Set')
+				break
 			except OSError as e:
 				print(e)
 				await asyncio.sleep(1)
@@ -159,7 +182,7 @@ class Neo_time():
 		self._set_ds()
 	
 	def _get_time(self):
-		(yr,mnth,day,dow,hr,mnt,sec,_)=self.rtc.datetime()
+		(yr,mnth,day,dow,hr,mnt,sec,_) = self.rtc.datetime()
 		if self.UTC_offset:
 			if self.UTC_offset > 0:
 				hr += self.UTC_offset
@@ -190,7 +213,9 @@ class Neo_time():
 		while True:
 			wdt.feed()
 			sec = self._get_time()
-			if sec % 5 == 0:
+			if sec % 5 == 0 or self.shape_changed:
+				if self.shape_changed:
+						self.shape_changed = False
 				if self.shape in ('blocks','circles'):
 					self.neo.fill((0,0,0))
 					self._shuffle(self.H10)
@@ -243,7 +268,7 @@ class Neo_time():
 					for n in self.border:
 						self.neo[n] = BRD	
 				self.neo.write()
-				await asyncio.sleep(1)		
+			await asyncio.sleep(1)		
 
 class Button():
 	def __init__(self,button_pin):
@@ -254,7 +279,6 @@ class Button():
 	async def is_pressed(self):
 		while True:
 			if self.button.value() == 0:
-				print('pressed')
 				self.pressed = True
 				await asyncio.sleep(0.3)
 			await asyncio.sleep(0)
@@ -269,11 +293,7 @@ async def main():
 	await neo_time.set()
 	while True:
 		if button.pressed:
-			neo_time.shape = shapes[n]
-			print(neo_time.shape)
-			n +=1
-			if n == 3:
-				n = 0
+			neo_time.next_shape()
 			button.pressed = False
 		#reset correct time from network twice a day (hr min sec)
 		if not(neo_time.rtc.datetime()[4] % 10) and neo_time.rtc.datetime()[5] == 5 and neo_time.rtc.datetime()[6] == 1:	 
