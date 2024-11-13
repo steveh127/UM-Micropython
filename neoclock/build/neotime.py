@@ -11,9 +11,6 @@ See README for detailed instructions.
 Except for setup the clock only connects to the network on initial boot
 and then twice a day to keep clock in sync using NTPtime.
 
-weblink and web_builder are not the standard versions as they
-are specialised to use access point for configuration.
-
 '''
 
 import asyncio
@@ -37,7 +34,7 @@ class Neo_time():
 		self.neo = NeoPixel(neo_pin,81)
 		self.neo.fill((0,0,0))
 		self.neo.write()
-		#full screen map
+		#full screen map for reference - not used
 		# self.screen =[
 		# 00,01,02,03,04,05,06,07,08,
 		# 09,10,11,12,13,14,15,16,17,
@@ -49,10 +46,6 @@ class Neo_time():
 		# 63,64,65,66,67,68,69,70,71,
 		# 72,73,74,75,76,77,78,79,80
 		# ]
-		self.H10 = [25,33,34,41,42,43,51,52,61]
-		self.H1  = [69,59,68,49,58,67,57,66,65]
-		self.M1  = [19,28,29,37,38,39,46,47,55]
-		self.M10 = [11,12,13,14,15,21,22,23,31]
 		#border
 		self.border = [0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,53,54,62,63,71,72,73,74,75,76,77,78,79,80]
 		#cross
@@ -87,8 +80,8 @@ class Neo_time():
 			self.__shape = value
 		if self.__shape == 'blocks':
 			#led mappings for 9 x 9 neopixel array	
-			self.H10 = [50,51,52,59,60,61,68,69,70]
-			self.H1  = [14,15,16,23,24,25,32,33,34]
+			self.H10 = [14,15,16,23,24,25,32,33,34]
+			self.H1  = [50,51,52,59,60,61,68,69,70]
 			self.M1  = [46,47,48,55,56,57,64,65,66]
 			self.M10 = [10,11,12,19,20,21,28,29,30]
 		if self.__shape == 'triangles':
@@ -249,8 +242,6 @@ class Neo_time():
 					if self.shape == 'triangles':
 						for n in self.border:
 							self.neo[n] = BRD	
-						# for n in self.salt:
-							# self.neo[n] = CRS
 					if self.shape == 'circles':
 						self.neo[self.centre] = CNT
 						if self.m1 == 0:
@@ -300,12 +291,11 @@ class Button():
 			await asyncio.sleep(0)
 
 async def main():
+	#power enable for display
 	Pin(5,Pin.OUT).value(1)
 	neo_time = Neo_time(Pin(6))
 	button = Button(0)
-	n = 1
-	shapes = ('blocks','circles','random')
-	show_task = asyncio.create_task(neo_time.show())
+	asyncio.create_task(neo_time.show())
 	await neo_time.set()
 	while True:
 		if button.pressed:
