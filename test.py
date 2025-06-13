@@ -1,11 +1,20 @@
-import asyncio
-import time
+# light_sleep_test.py
+from machine import lightsleep
+#from time import sleep, ticks_ms, ticks_diff
 
-async def test():
-    while True:
-        start = time.ticks_ms()
-        for i in range(500):
-            await asyncio.sleep_ms(2)
-        print(time.ticks_diff(time.ticks_ms(), start), 'msecs')
-asyncio.run(test())
+# def test(n):
+    # for i in range(n):
+        # #t0 = ticks_ms()
+        # #sleep(0.1)
+        # lightsleep(5000)
+        # #sleep(0.1)
+        # #print(i, ticks_diff(ticks_ms(), t0))
+        # print('done')
+       
+       
 
+# test(2)
+#sleep(0.1)
+print('start')
+lightsleep(5000)
+print('done')

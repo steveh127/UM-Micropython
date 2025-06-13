@@ -27,7 +27,7 @@ setup = Web_page(
 			SSID_input := Text_input(label='',command='SSID_input',size=20,value=act.best_net,button=False),
 			Label('Enter PASSWORD:'),
 			PSWD_input := Text_input(label='',command='PSWD_input',size=20,button_label='',button=False),
-			Type_radio := Radio_buttons(('blocks','circles','random'),command='Type_radio',value='blocks',label='Clock Pattern',
+			Type_radio := Radio_buttons(('blocks','circles','random','triangles','cols','rows','text'),command='Type_radio',value='blocks',label='Clock Pattern',
 							button_label='',button=False),
 			Time_radio := Radio_buttons(('12hr','24hr'),command='Time_radio',value='24hr',label='12hr or 24hr',button=False),
 			Label('UTC offset:'),
