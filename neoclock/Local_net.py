@@ -1,3 +1,0 @@
-SSID='vodafone254E6F'
-PSWD='q2R2Kcbry6a79cfs'
-
