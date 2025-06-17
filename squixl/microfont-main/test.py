@@ -2,7 +2,7 @@ import SQUiXL
 from squixl_text import *
 		
 with SQUiXL as SQUiXL:
-	scr = SQUiXL_Text()
+	scr = SQUiXL_Text(sans24I)
 		
 	scr.write("SQUiXL !",100,100, PURPLE,font=serif64B)
 
@@ -19,5 +19,5 @@ with SQUiXL as SQUiXL:
 	while True:
 		scr.write(str(i),10, 10, YELLOW)
 		sleep(1)
-		scr.write(str(i), 10, 10, scr.bgrnd)
+		scr.write(str(i), 10, 10, scr.background)
 		i += 1

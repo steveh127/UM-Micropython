@@ -1,0 +1,68 @@
+Setting up the WIFI connection  
+
+The Clock needs to make occasional connections to the internet to set the time 
+and ensure it stays correct. For this you need to set the WIFI network 
+name and password.  
+
+1.	On first powering up the NeoClock the display will be all blue. 
+	This shows that there is no network configuration set.
+	  
+2. 	Go to WiFi settings on your PC, phone or tablet.
+
+3. 	On the list of available networks you should see CLOCK. This is a (very) 
+	temporary network provided by the NeoClock. It only exists while the 
+	WIFI is being set up. Connect to this network, no other network is 
+	required. It may warn of no internet connection, this is normal.  
+	
+4. 	Open your favourite web browser and, in the address box, enter: 
+		192.168.4.1 
+	This should bring up a ‘Clock Dashboard’ with fields for the WIFI, time
+	and shape parameters. It should automatically detect the strongest local network.  
+
+6. Carefully enter your correct / required parameters and save them. On clicking the
+   ‘Save’ button the display should go green.  The clock will soon switch to displayimg 
+   time using the selected style. 
+
+Once time is set the network disconnects. It will briefly reconnect and reset time twice
+a day at 10:05 and 20:05. 
+
+Note for the UM crystal display using blocks time shows as intended with USB 
+port to left when viewed from front.  
+
+This setup only needs doing once in a location. NeoClock remembers WIFI, shape and time parameters.  
+
+Should network parameters be set incorrectly or the WIFI network is not available NeoClock will try 
+to connect for a while. The display will then go solid blue. Repeat the instructions above to reconnect.
+
+Using NeoClock
+
+To start with a warning the 'crystals' are not secured in place and some are loose enough to fall out if clock is tipped
+over. They are easy to put back but if lost replacements would be problematic.
+
+The time displays work best if the power connector is on the left with buttons at the bottom.  
+
+On powerup the clock shows 29:59, once a network connection is made this will soon switch to the correct time. 
+
+Currently NeoClock operates on GMT / BST which change automatically.  An offset can be set 
+when setting up the clock for non GMT use, if an offset is set then daylight saving won’t 
+be automatically set.  
+
+A long press on the button nearest the corner will select the next time display format. There 
+are currently 7 available formats. All tell the time, some are more readable than others. No clues as
+to how formats work, only one is obvious.
+
+A short press on the button nearest the corner toggles display on and off.
+
+There is a delay of up to 5 seconds in display updating as it only updates every multiple of 5 seconds, be patient.
+
+Some technical details
+
+The clock uses Unexpected Makers Light Crystals LED Art Kit. This presents an array of 9 x 9 RGB LEDS. Control is provided by
+an ESP32-S3 microcontroller module. The software that controls the clock is written in micropython and, if you know what you 
+are doing, can be accessed and modified. Only do this if you really know what you are doing! This is quite complex 
+code. It uses asynchronous programming extensively along with closures and properties. And why NeoClock? The LED array is what is known as a neopixel array and is driven by
+a NeoPixel class from micropython, hence NeoClock.
+
+
+
+
