@@ -90,9 +90,11 @@ class MicroFont:
     # Lowlevel framebuffer function. That's the core of the library, as handles
     # the actual drawing of the character to the target framebuffer memory
     # with rotation, oversampling and so forth.
+    # SH - modified to enable overwriting if required by infilling background
     @micropython.viper
     def draw_ch_blit(self, fb:ptr8, fb_width:int, fb_len:int, ch_buf:ptr8, ch_width:int, ch_height:int, dst_x:int, dst_y:int, off_x:int, off_y:int, color:int, sin_a:int, cos_a:int, colormode:int):
         front = color
+        # int required by viper even though self.back is an integer
         back = int(self.back)
         for y in range(ch_height):
             for x in range(ch_width):

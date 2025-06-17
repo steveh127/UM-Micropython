@@ -59,6 +59,9 @@ class SQUiXL_Text():
 	
 	def fill(self,colour):
 		self.fb.fill(colour)
+	
+	def rect(self,x,y,width,height,colour=WHITE,fill=False):
+		self.fb.rect(x,y,width,height,colour,fill)
 
 	def write(self,text,x,y,colour,*,rotation=0,font=None,):
 		if font is None:
