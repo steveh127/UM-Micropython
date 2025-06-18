@@ -126,7 +126,7 @@ touch = GT911(i2c, irq_pin=3, reset_pin=5, ioex=ioex)
 
 # Initialise the DRV2605 haptic engine
 drv = DRV2605(i2c)
-# Seth the driver to a basic click effect
+# Set the driver to a basic click effect
 drv.sequence[0] = Effect(1)
 
 
