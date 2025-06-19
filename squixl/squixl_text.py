@@ -14,8 +14,9 @@ class _SQUiXL_Text():
 		self.background = DARK_BLUE
 		self.fill(self.background)
 		self.font = font
-		self.click = SQUiXL.drv.play
-		self.click()
+		self.buzz = SQUiXL.drv.play
+		SQUiXL.drv.sequence[0] = SQUiXL.Effect(14)
+		self.buzz()
 	
 	def fill(self,colour):
 		self.fb.fill(colour)

@@ -2,19 +2,18 @@ import asyncio
 
 from SQUiXL import touch
 
-class SQ_Touch():
-	
-	def __init__(self):
-		self.targets = []
+class _SQ_Touch():	
+	def __init__(self):	
 		self.touch = touch
 		self.point = -1,-1
 		asyncio.create_task(self.check())
-		
-	def add_target(self,rectangle,action):
+		self.targets = []
+	
+	def __call__(self,rectangle,action):
 		x,y,width,height = rectangle
 		box = x,x+width,y,y+height
 		self.targets.append((box,action))
-
+	
 	async def check(self):
 		last_y = last_x = -1
 		while True:
@@ -27,9 +26,21 @@ class SQ_Touch():
 			await asyncio.sleep(0.3)
 	
 	async def check_targets(self,point):
+		x,y = point
 		for target in self.targets:
-			x,y = point
 			x_min,x_max,y_min,y_max = target[0]
 			if (x > x_min) and (x < x_max) and (y > y_min) and (y < y_max):
 				await target[1]()
 				break
+'''				
+create a singleton instance of SQ_Touch that acts
+as a function to add new targets
+'''				
+def active_targets():
+	add_target =_SQ_Touch()
+	def get():
+		nonlocal add_target
+		return add_target	
+	return get
+	
+get_add_target = active_targets()
