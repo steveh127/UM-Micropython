@@ -32,15 +32,6 @@ class _SQ_Touch():
 			if (x > x_min) and (x < x_max) and (y > y_min) and (y < y_max):
 				await target[1]()
 				break
-'''				
-create a singleton instance of SQ_Touch that acts
-as a function to add new targets
-'''				
-def active_targets():
-	add_target =_SQ_Touch()
-	def get():
-		nonlocal add_target
-		return add_target	
-	return get
-	
-get_add_target = active_targets()
+
+#create instance - import this to add touch
+add_target = _SQ_Touch()

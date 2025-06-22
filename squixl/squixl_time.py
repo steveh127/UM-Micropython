@@ -4,7 +4,7 @@ import network
 import ntptime
 import sys
 
-from squixl_text import get_screen
+from squixl_text import screen
 
 from config import SSID,PSWD,H12,OFFSET
 
@@ -17,7 +17,7 @@ class SQ_Time():
 		self.UTC_offset = OFFSET
 		self.ds  = False
 		self.H12 = H12
-		self.scr = get_screen()
+		self.scr = screen
 		self.font = font
 		self.rtc = RTC()
 		self.rtc.datetime((2022,1,1,1,19,59,0,0)) #(year,month,day,day of week,hour,minute,second,subsecond)

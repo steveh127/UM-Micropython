@@ -3,8 +3,9 @@ import framebuf
 import SQUiXL
 from fonts import sans32, DARK_BLUE,WHITE
 
-#only access one copy of this class
-#using get_screen()
+'''
+Only access one copy of this class using import screen
+'''
 class _SQUiXL_Text():
 	def __init__(self,font):
 		#setup SQUiXL screen
@@ -23,6 +24,9 @@ class _SQUiXL_Text():
 	
 	def rect(self,x,y,width,height,colour=WHITE,fill=False):
 		self.fb.rect(x,y,width,height,colour,fill)
+	
+	def circle(self,x,y,radius,colour=WHITE,fill=False):
+		self.fb.ellipse(x,y,radius,radius,colour,fill)
 
 	def write(self,text,x,y,colour,*,rotation=0,font=None,):
 		if font is None:
@@ -53,14 +57,5 @@ class _SQUiXL_Text():
 		width += 2	
 		return width,height
 			
-
-#use this to get a copy of active screen created on imported
-#SQUiXL_Text must be a singleton
-def active_screen():
-	screen = _SQUiXL_Text(sans32)
-	def get():
-		nonlocal screen
-		return screen	
-	return get
-	
-get_screen = active_screen()
+#create instance - import this to use screen
+screen = _SQUiXL_Text(sans32)
