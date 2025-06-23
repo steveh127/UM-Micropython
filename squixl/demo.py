@@ -34,14 +34,12 @@ async def no_test():
 	await asyncio.sleep(0.5)	
 	
 async def main():
-	#scr = get_screen()
-	#add_target = get_add_target()
 	
 	scr.font = sans24I	
 	scr.write("SQUiXL !",100,100, PURPLE,font=serif64I)
 	
-	b1 = Button("Micropython is now running SQUiXL",80, 400,WHITE,clicked=RED,font=sans24I,action=pressed)
-	rb = Select_Button("TEST",200, 50,10,WHITE,clicked=GREEN,font=sans32B,action=test,off_action=no_test )
+	b1 = Button('b1',"Micropython is now running SQUiXL",80, 400,WHITE,clicked=RED,font=sans24I)
+	rb = Select_Button('rb',"TEST",200, 50,10,WHITE,clicked=GREEN,font=sans32B,values=[1])
 	
 	clock = SQ_Time(350,10,GREEN,font=sans32)
 	i = 1
