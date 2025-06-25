@@ -13,10 +13,10 @@ async def actions(widget):
 		await asyncio.sleep(0.5)
 		return
 	if widget.name == 'test':
-		value = widget.values[0]
+		value = widget.value
 		if widget.on:
 			scr.write("Testing 1 2 3 " + str(value),100, 200, GREEN,rotation=45)
-			widget.values[0] += 1
+			widget.value += 1
 		else:
 			scr.write("Testing 1 2 3 "  + str(value - 1), 100, 200, scr.background,rotation=45)
 		await asyncio.sleep(0.5)
