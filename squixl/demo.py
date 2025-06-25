@@ -27,16 +27,18 @@ async def main():
 	sb = Select_Button('test',"TEST",200, 50,10,GREEN,clicked=BLUE,font=sans32I)
 	sb.value = 1
 	
-	r1 = Radio_Button('red',"Red",200, 200,10,RED,clicked=RED,font=serif32I)
-	r2 = Radio_Button('blue',"Blue",200, 250,10,BLUE,clicked=BLUE,font=serif32I)
-	r3 = Radio_Button('green',"Green",200, 300,10,GREEN,clicked=GREEN,font=serif32I)
+	r1 = Radio_Button('red',"Red",100, 200,10,RED,clicked=RED,font=serif32I)
+	r2 = Radio_Button('blue',"Blue",100, 250,10,BLUE,clicked=BLUE,font=serif32I)
+	r3 = Radio_Button('green',"Green",100, 300,10,GREEN,clicked=GREEN,font=serif32I)
 	
 	rbut = Radio_Buttons((r1,r2,r3)) 
 	#rbut = Radio_Buttons((r1,r2,r3),default=2) # default is index to button list
 	
+	
+	
 	clock = SQ_Time(350,10,GREEN,font=sans32)
 	
-	menu=Menu('Test',[],100,100,GREEN,font=sans32,clicked=RED)
+	menu=Menu('Test',[('cat','Cat'),('mouse','Mouse'),('dog','Dog')],250,200,GREEN,font=sans32,clicked=RED)
 	
 	i = 1
 	

@@ -26,9 +26,15 @@ async def actions(widget):
 			print(widget.name + ' ON')
 		else:
 			print(widget.name + ' OFF')
-		return		
+		return
+	if widget.name in ('cat','mouse','dog'):
+		print(widget.name)
+		return				
 	else:
 		await asyncio.sleep(0.2)
+		
+
+		
 
 	
 	

@@ -28,8 +28,8 @@ class Button(Widget):
 		add_target((self.x,self.y,self.w,self.h),self.do_action)
 	
 	async def do_action(self):
-		scr.write_over(self.text,self.x,self.y,self.colour,font=self.font,background=self.colour)
 		scr.buzz()
+		scr.write_over(self.text,self.x,self.y,self.colour,font=self.font,background=self.colour)
 		await actions(self)
 		await asyncio.sleep(0.5)
 		scr.write_over(self.text,self.x,self.y,self.colour,font=self.font,background=self.clicked)
@@ -45,7 +45,8 @@ class Select_Button(Widget):
 		add_target((self.x,self.y,self.radius * 2,self.radius * 2),self.do_action)
 		self.on = False
 	
-	async def do_action(self):
+	async def do_action(self):		
+		scr.buzz()	
 		self.on = not self.on
 		if not self.on:
 			#scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius,colour=self.colour)
@@ -54,7 +55,6 @@ class Select_Button(Widget):
 			#scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius,colour=self.colour)
 			scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius - 2,colour=self.clicked,fill=True)
 		await actions(self)
-		scr.buzz()	
 		await asyncio.sleep(0.5)
 
 class Radio_Button(Widget):
@@ -69,12 +69,12 @@ class Radio_Button(Widget):
 		self.on = False
 	
 	async def do_action(self):
+		scr.buzz()
 		self.on = not self.on
 		if not self.on:
 			scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius - 2,colour=scr.background,fill=True)
 		if self.on:
 			scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius,colour=self.colour)
-		scr.buzz()	
 		await asyncio.sleep(0.5)
 
 class Radio_Buttons():
@@ -111,6 +111,32 @@ class Radio_Buttons():
 					await self.update_buttons()
 			await asyncio.sleep(0.3)
 
+class _Menu_Choice(Widget):
+	def __init__(self,name,option,n,x,y,colour,*,font,clicked):
+		super().__init__(name,'',x,y,colour,font=font,clicked=clicked)
+		self.option = option
+		self.width,self.height = scr.get_size(option,self.font)
+		self.radius  = int(self.height / 2)
+		self.Y = (self.y + (n * (self.height + 2))) 
+		scr.circle(self.x + self.radius ,self.Y + self.radius,int(self.radius/2),self.colour,fill=True)
+		scr.write_over(option,self.x + self.height + 4,self.Y,self.colour,font=self.font)
+		add_target((self.x,self.Y,self.height + 4 + self.width,self.height),self.do_action)
+		
+	async def do_action(self):
+		scr.buzz()
+		scr.circle(self.x + self.radius ,self.Y + self.radius,int(self.radius/2),self.clicked,fill=True)
+		scr.write_over(self.option,self.x + self.height + 4,self.Y,self.clicked,font=self.font)
+		await actions(self)
+		scr.circle(self.x + self.radius ,self.Y + self.radius,int(self.radius/2),self.colour,fill=True)
+		scr.write_over(self.option,self.x + self.height + 4,self.Y,self.colour,font=self.font)
+		await asyncio.sleep(0.5)
+
 class Menu(Widget):
 	def __init__(self,name,options,x,y,colour,*,font,clicked):
 		super().__init__(name,'',x,y,colour,font=font,clicked=clicked)
+		n = 0
+		for option in options:
+			_Menu_Choice(option[0],option[1],n,x,y,colour,font=font,clicked=clicked)
+			n += 1					
+
+
