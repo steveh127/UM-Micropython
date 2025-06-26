@@ -1,11 +1,43 @@
 import asyncio
 
-from squixl_touch import add_target
+from SQUiXL import touch
+
 from squixl_text import screen as scr
 from actions import actions
 
+class SQ_Touch():	
+	def __init__(self):	
+		self.touch = touch
+		self.point = -1,-1
+		asyncio.create_task(self.check())
+		self.target=((0,0,0,0),print)
+		
+	def __call__(self,rectangle,action):
+		x,y,width,height = rectangle
+		box = x,x+width,y,y+height
+		self.target = box,action
+	
+	async def check(self):
+		last_y = last_x = -1
+		while True:
+			points = self.touch.read_points()[1]
+			if (last_y != points[0][0]) and (last_x != points[0][1]):
+				point = points[0][1],points[0][0]
+				await self.check_target(point)
+				last_x = points[0][1]
+				last_y = points[0][0]
+			await asyncio.sleep(0.3)
+	
+	async def check_target(self,point):
+		x,y = point
+		x_min,x_max,y_min,y_max = self.target[0]
+		if (x > x_min) and (x < x_max) and (y > y_min) and (y < y_max):
+			await self.target[1]()
+
+
 class Widget():
 	def __init__(self,name,text,x,y,colour,*,font,clicked):
+		self.add_target = SQ_Touch()
 		self.name = name
 		self.text = text
 		self.colour = colour
@@ -25,7 +57,7 @@ class Button(Widget):
 		self.b=int(self.h//4)
 		scr.rect(self.x - self.b,self.y-self.b,self.w + (2 * self.b) + 2,self.h + (2 * self.b))
 		scr.write_over(self.text,self.x,self.y,self.colour,font=self.font,background=self.clicked)
-		add_target((self.x,self.y,self.w,self.h),self.do_action)
+		self.add_target((self.x,self.y,self.w,self.h),self.do_action)
 	
 	async def do_action(self):
 		scr.buzz()
@@ -42,17 +74,15 @@ class Select_Button(Widget):
 		scr.circle(x + self.radius ,y  + self.radius,self.radius,colour=colour)
 		scr.circle(x + self.radius ,y  + self.radius,self.radius - 2,colour=scr.background,fill=True)
 		scr.write(text,x + self.radius * 2 + 7 ,y,colour,font=self.font)
-		add_target((self.x,self.y,self.radius * 2,self.radius * 2),self.do_action)
+		self.add_target((self.x,self.y,self.radius * 2,self.radius * 2),self.do_action)
 		self.on = False
 	
 	async def do_action(self):		
 		scr.buzz()	
 		self.on = not self.on
 		if not self.on:
-			#scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius,colour=self.colour)
 			scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius - 2,colour=scr.background,fill=True)
 		if self.on:
-			#scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius,colour=self.colour)
 			scr.circle(self.x + self.radius ,self.y  + self.radius,self.radius - 2,colour=self.clicked,fill=True)
 		await actions(self)
 		await asyncio.sleep(0.5)
@@ -65,7 +95,7 @@ class Radio_Button(Widget):
 		scr.circle(x + self.radius ,y  + self.radius,self.radius,colour=colour)
 		scr.circle(x + self.radius ,y  + self.radius,self.radius - 2,colour=scr.background,fill=True)
 		scr.write(text,x + self.radius * 2 + 7 ,y,colour,font=self.font)
-		add_target((self.x,self.y,self.radius * 2,self.radius * 2),self.do_action)
+		self.add_target((self.x,self.y,self.radius * 2,self.radius * 2),self.do_action)
 		self.on = False
 	
 	async def do_action(self):
@@ -120,7 +150,7 @@ class _Menu_Choice(Widget):
 		self.Y = (self.y + (n * (self.height + 2))) 
 		scr.circle(self.x + self.radius ,self.Y + self.radius,int(self.radius/2),self.colour,fill=True)
 		scr.write_over(option,self.x + self.height + 4,self.Y,self.colour,font=self.font)
-		add_target((self.x,self.Y,self.height + 4 + self.width,self.height),self.do_action)
+		self.add_target((self.x,self.Y,self.height + 4 + self.width,self.height),self.do_action)
 		
 	async def do_action(self):
 		scr.buzz()

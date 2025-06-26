@@ -18,6 +18,7 @@ class _SQUiXL_Text():
 		self.buzz = SQUiXL.drv.play
 		SQUiXL.drv.sequence[0] = SQUiXL.Effect(14)
 		self.buzz()
+		self.deinit = SQUiXL.screen_deinit
 	
 	def fill(self,colour):
 		self.fb.fill(colour)
