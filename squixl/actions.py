@@ -1,5 +1,6 @@
 import asyncio
 import network
+from time import sleep
 
 import mrequests
 
@@ -9,12 +10,13 @@ from fonts import *
 
 async def actions(widget):
 	if widget.name == 'b1':
-		if widget.blue:
-			scr.write("Going, going, gone...",430, 350, BLUE,rotation=-90,font=serif32B)
-			widget.blue = False
-		else:
-			scr.write("Going, going, gone...",430, 350, GREEN,rotation=-90,font=serif32B)
-			widget.blue = True
+		setup,punchline = get_joke()
+		#if widget.blue:
+		scr.write(setup,380, 460, BLUE,rotation=-90,font=serif24B)
+		#widget.blue = False
+		#else:
+		scr.write(punchline,430, 460, GREEN,rotation=-90,font=serif24B)
+		#widget.blue = True
 		await asyncio.sleep(0.5)
 		return
 	if widget.name == 'test':
@@ -47,22 +49,22 @@ async def actions(widget):
 	else:
 		await asyncio.sleep(0.2)
 		
-async def get_jokes():
+def get_jokes():
 	net = network.WLAN(network.STA_IF)
 	net.active(True)
 	net.config(reconnects=0)
 	i = 0
-	while i < 30:
+	while i < 60:
 		try:
 			net.connect(SSID,PSWD)
 		except OSError as e:
-			await asyncio.sleep(0.1)
+			sleep(0.1)
 			i += 1
 		if net.isconnected():
 			break
 	else:
 		return None
-
+		
 	url = "https://official-joke-api.appspot.com/jokes/random/5get"
 	request = mrequests.get(url, headers={b"Accept": b"application/json"})
 	
@@ -77,20 +79,27 @@ async def get_jokes():
 	request.close()
 	return jokes
 	
-# async def jokes():
-	# while True:
-		# jokes = await get_jokes()
-		# if jokes is not None:	
-			# for i in range(5):
-				# print(jokes[i]['setup'])
-				# print(jokes[i]['punchline'])
-				# print()
-		# else:
-			# print('no jokes')
-		# await asyncio.sleep(10)
-		
-# asyncio.run(jokes())
-		
+class Get_Joke():
+	def __init__(self):
+		self.jokes = None
+		self.get_more_jokes()
+	
+	def get_more_jokes(self):
+		while self.jokes is None:
+			self.jokes = get_jokes()
+			sleep(0.5)
+		self.n = 0
+	
+	def __call__(self):
+		joke = self.jokes[self.n]
+		self.n += 1
+		if self.n == 5:
+			self.jokes = None
+			self.get_more_jokes()
+		return  joke['setup'],joke['punchline']		
+
+get_joke = Get_Joke()	
+	
 
 	
 	
