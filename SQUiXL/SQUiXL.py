@@ -7,10 +7,13 @@
 # Import required libraries
 from micropython import const
 from machine import Pin, I2C, PWM, RGB
+
 from max17048 import MAX17048
 from lca9555 import LCA9555, OUTPUT, HIGH, LOW, INPUT
+from gt911 import GT911 
+
 from drv2605 import DRV2605, Effect, Pause, MODE_INTTRIG
-from gt911 import GT911
+
 import time
 
 
