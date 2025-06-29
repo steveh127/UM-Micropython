@@ -4,7 +4,7 @@ import network
 import ntptime
 import sys
 
-from squixl_text import screen
+from squixl_screen import screen
 
 from config import SSID,PSWD,H12,OFFSET
 

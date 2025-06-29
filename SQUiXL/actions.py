@@ -2,7 +2,7 @@ import asyncio
 from time import sleep
 
 
-from squixl_text import screen as scr
+from squixl_screen import screen as scr
 from fonts import *
 
 from joke import Get_Joke

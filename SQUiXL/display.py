@@ -1,9 +1,13 @@
 import asyncio
 
-from squixl_text import screen as scr
+from squixl_screen import screen as scr
 from squixl_time import SQ_Time
 from sq_controls import Button,Select_Button,Radio_Button,Radio_Buttons,Menu
 from fonts import *
+
+async def corner():
+	print('Corner touched')
+	await asyncio.sleep(0.3)
 
 async def display():
 	scr.font = sans24I	
@@ -27,6 +31,8 @@ async def display():
 	clock = SQ_Time(180,10,GREEN,font=sans32)
 	
 	menu = Menu('Test',[('cat','Cat'),('mouse','Mouse'),('dog','Dog')],250,200,GREEN,font=sans32,clicked=RED)
+	
+	scr.add_target((0,0,40,40),corner)
 	
 	i = 1
 	scr.font = serif32B
