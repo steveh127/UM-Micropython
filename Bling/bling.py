@@ -372,6 +372,7 @@ class Bling_Display(NeoPixel):
 		while True:
 			if self.scrolling:
 				text=self.text
+				text +=  '                      '
 				self.text=''
 				len_txt = self.length(text)
 				self.text_buffer=[]

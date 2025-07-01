@@ -11,26 +11,70 @@ used for development.
 
 This respository contains:
 
-bling.py, a micropython module providing classes to control Bling display and buttons.
-demo.py, a program to demonstrate some Bling! functionality
-kclock, a kitchen clock and timer.
+bling.py, a micropython module providing classes to control Bling display and buttons and kclock, a kitchen clock and timer.
 
+# bling.py - Tools to use with Bling
 
-## Display
+#### class Bling_Display.py
 
-class = Bling_Display 
+This class manages the display, in particular textual display. A full set of characters is provided which is readily extensible either by editing code or on the fly.
 
-### Basic
+Text can be scrolled, text too long to show completely will be automatically scrolled.
 
-### Asyncio
+Strings can use markup to change colours within a string:  '{RED}B{PURPLE}ling{GREEN}!'
 
-### Modifying code
+For the full range of functions see the code.
 
-## Buttons
+To function correctly the display should be run in an asynchronous environment. Before initiating the main async loop run the .setup_tasks() function. 
 
-## To Do
+Text should be displayed using the show_string function, optional parameters will set the colour, brightness and justification ('C','R' or 'L') otherwise the current global settings will be used.
 
-kclock:
+There is also a colour class to manage variable brightness of defined colours. 
 
-expand to include I2S playback from SD card = leveraging existing code. 								
-								
+#### class Bling_Buttons
+
+A small class used to setup and check buttons.
+
+When creating an instance - and only create one! Supply a list of four coroutines as the initial actions of the buttons. Actions can be changed during the program running.
+
+A task to run the button check coroutine is essential. 
+
+# kclock, a program for a kitchen clock / timer for Bling!.
+
+#### Installation
+
+I use Linux to develop in micropython and a linux script to do the build is provided. Otherwise use mpremote or your preferred tools to copy bling.py and the contents of the kclock directory to the mcu.
+
+Edit net_config,py to provide WiFi parameters,
+
+Currently it is necessary to edit net_config.py to provide SSID and password to connect to your WiFi.
+
+Network is only used to set time.
+
+Note as I live in the UK the UTC provided by ntptime is great as for all practical purposes UTC = GMT. I also have a function to set daylight saving which is only guaranteed to work in the UK. And will probably work in other countries using GMT. Otherwise you will need to tweak the code.
+
+Buttons: upper left is 'Set', upper right is 'Start'. Other buttons available for future enhancements. 
+
+#### Operation
+
+Starts in clock mode. Clock display can be toggled with 'Start' button.
+
+Pressing set enters timer mode showing 00:00
+
+Set button is used to set minutes. Start initiates countdown.
+Beeps and flashes at end. Set clears alarm and returns to clock. 
+If Set is pressed during count return to clock,
+
+With display zeroed Start initiates stopwatch mode. This counts up until Set is
+pressed which holds display. Pressing Set again returns to clock.
+
+Pressing Start when timing pauses timer, can restart timing with Start or return to Clock
+with Set. 
+
+### To Do
+
+Add web interface to input network parameters. Already done for other projects just needs copying across and customising.
+
+Provide support for other timezones.
+
+Add alarm functions with possible web page to control locally.

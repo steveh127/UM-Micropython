@@ -4,5 +4,5 @@ do
 	mpremote cp "$F" :
 done
 cd ..
-mpremote cp "bling.py" :
-mpremote cp "demo.py" :
+mpremote cp bling.py :
+

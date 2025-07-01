@@ -12,6 +12,8 @@ Display with a driver having a show_time funcion that takes a time tuple (min,se
 and displays it, with no arguments show_time blanks the display.
 4 buttons, 2 used: set (top left) and start(top right), active high.
 
+Currently it is necessary to edit net_config.py to provide SSID and password to connect to your WiFi.
+
 Network is only used to set time. 
 
 Functionality:
