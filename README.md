@@ -14,7 +14,7 @@ A simulation of a computer from the Film wargames see UMs website for details. A
 
 ## Bling
 
-A display using tiny RGB LEDs controlled using the neopixel module. Driven with an ESP32-S3 and including an I2S amplifier and SD card slot. A kitchen clock application and an audio player demonstrate it's capabilities.
+A display using tiny RGB LEDs controlled using the neopixel module. Driven with an ESP32-S3 and including an I2S amplifier and SD card slot. A kitchen clock application demonstrates some of it's capabilities.
 
 ## Light Crystals Kit
 
@@ -22,4 +22,4 @@ An attractive 9 x 9 LED array, again using the neopixel module. A puzzle clock a
 
 ## SQUiXL
 
-A very capable 480 x 480 touch screen display that includes a I2S and I2C interfaces and an SD card slot. Recently released and in active development. 
+A very capable 480 x 480 touch screen display that includes a I2S and I2C interfaces and an SD card slot. Recently released and micropython in active development by me and Unexpected Maker. 
