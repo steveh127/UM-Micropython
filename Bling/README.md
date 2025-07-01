@@ -71,10 +71,12 @@ pressed which holds display. Pressing Set again returns to clock.
 Pressing Start when timing pauses timer, can restart timing with Start or return to Clock
 with Set. 
 
-### To Do
+### Possible enhancements
+
+As this application relies on the ESP32-S3 very accurate internal RTC with time being set using an ntp server and updated daily the I2C pins are freed up and can be used as general GPIO pins to drive, for instance a buzzer for alarm use. I've tested this and it works fine and doesn't require the complexity of I2S for basic sounds.
 
 Add web interface to input network parameters. Already done for other projects just needs copying across and customising.
 
 Provide support for other timezones.
 
-Add alarm functions with possible web page to control locally.
+Add longer term alarm functions with possible web page to control locally.

@@ -2,8 +2,19 @@
 
 ## Introduction
 
+This application runs a 'puzzle clock' on UMs Light Crystals kit. It displays the time in a number of somewhat cryptic formats and one rather less cryptic form. Exactly how they work is for you to work out.
+
+I put this program together using code from other projects modified slightly. Technical details are provided elsewhere but with care modifying the code should be straightforward if you know micropython and are happy using asyncio. 
+
 ## Installing Software
 
+First install micropython on your light crystals kit. Use the Unexpected Maker OMGS3 build as that is what the light crystals kit is based on. 
+
+Linux users can download the repository navigate to the Light_Crystals directory, make clock_builder executable and then run it.
+
+Other users just need to copy the files in the 'build' directory to the mcu using mpremote or whatever tool you usually use to copy files to mcus.
+
+Instructions on setting up the wifi are shown below and are also in instructions.txt which is a basic printable version.
 
 ## Setting up the WIFI connection
 
