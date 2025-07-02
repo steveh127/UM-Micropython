@@ -6,7 +6,7 @@ Generally the provided modules are designed as a basis for further development t
 
 I develop applications using Linux and Linux scripts are provided to facilitate installing software. Users of proprietary OSs should be able to copy required files to the devices using mpremote without problems though this is not tested by me.
 
-The code in this repository is provided on an as-is basis. Fell free to download or clone it and use it as  source of ideas. Currently only the SQUiXL code is being actively developed. 
+The code in this repository is provided on an as-is basis. Feel free to download or clone it and use it as  source of ideas. Currently only the SQUiXL code is being actively developed. 
 
 The devices in historical sequence are:
 
@@ -25,3 +25,5 @@ An attractive 9 x 9 LED array, again using the neopixel module. A puzzle clock a
 ## SQUiXL
 
 A very capable 480 x 480 touch screen display that includes a I2S and I2C interfaces and an SD card slot. Recently released and micropython in active development by me and Unexpected Maker. 
+
+There is also a *common* directory. this holds the core web modules and can be used in many projects.

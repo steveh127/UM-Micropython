@@ -1,6 +1,6 @@
 # Micropython on SQUiXL.
 
-It is assumed anyone wishing to run micropython on SQUiXL already has familiarity with micropython on the ESP32. SQUiXL is probaly not a good place to start with micropython as the hardware configuration is 'interesting' with the need to drive a large full colour touchscreen. It is assumed *esptool, mpremote* and *Thonny* are available.
+It is assumed anyone wishing to run micropython on SQUiXL already has familiarity with micropython on the ESP32 and asynchronous programming in python. SQUiXL is probaly not a good place to start with micropython as the hardware configuration is 'interesting' with the need to drive a large full colour touchscreen. It is assumed *esptool, mpremote* and *Thonny* are available.
 
 I develop using a Linux setup, specifically the *geany* editor setup to use *mpremote* to copy files to the SQ and run code directly. 
 
@@ -88,7 +88,7 @@ This is a function that ties the name of a widget to its actions. If necessary w
 
 ### `joke.py` & `mrequests.py`
 
-mrequests.py is used by jokes.py to download jokes to prove micropython can tell jokes too (currently a limited set per run}
+mrequests.py is used by jokes.py to download jokes to prove micropython can tell jokes too (currently a limited set per run}. This is very basic proof of concept code and needs a lot of refinement for real use.
 
 ### `main.py`
 
