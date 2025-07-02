@@ -1,4 +1,5 @@
-# Unexpected Maker - Bling! Micropython
+# Unexpected Makers - Bling! 
+## Micropython 
 
 Bling! features an 8 x 40 RGB LED array that can be controlled using the micropython(MP) NeoPixel 
 class included with the standard MP build. The basic Bling! board includes an ESP32 S3 mcu and a lot
@@ -11,17 +12,17 @@ used for development.
 
 This respository contains:
 
-bling.py, a micropython module providing classes to control Bling display and buttons and kclock, a kitchen clock and timer.
+***bling.py***, a micropython module providing classes to control Bling display and buttons and ***kclock***, a kitchen clock and timer.
 
-# bling.py - Tools to use with Bling
+## *bling.py* - Tools to use with Bling
 
-#### class Bling_Display.py
+#### *class Bling_Display.py*
 
 This class manages the display, in particular textual display. A full set of characters is provided which is readily extensible either by editing code or on the fly.
 
 Text can be scrolled, text too long to show completely will be automatically scrolled.
 
-Strings can use markup to change colours within a string:  '{RED}B{PURPLE}ling{GREEN}!'
+Strings can use markup to change colours within a string e.g. '{RED}B{PURPLE}ling{GREEN}!'`
 
 For the full range of functions see the code.
 
@@ -31,7 +32,7 @@ Text should be displayed using the show_string function, optional parameters wil
 
 There is also a colour class to manage variable brightness of defined colours. 
 
-#### class Bling_Buttons
+#### *class Bling_Buttons*
 
 A small class used to setup and check buttons.
 
@@ -39,15 +40,13 @@ When creating an instance - and only create one! Supply a list of four coroutine
 
 A task to run the button check coroutine is essential. 
 
-# kclock, a program for a kitchen clock / timer for Bling!.
+# *kclock*, a program for a kitchen clock / timer for Bling!.
 
 #### Installation
 
 I use Linux to develop in micropython and a linux script to do the build is provided. Otherwise use mpremote or your preferred tools to copy bling.py and the contents of the kclock directory to the mcu.
 
-Edit net_config,py to provide WiFi parameters,
-
-Currently it is necessary to edit net_config.py to provide SSID and password to connect to your WiFi.
+Currently it is necessary to edit `net_config.py` to provide SSID and password to connect to your WiFi.
 
 Network is only used to set time.
 
@@ -73,7 +72,7 @@ with Set.
 
 ### Possible enhancements
 
-As this application relies on the ESP32-S3 very accurate internal RTC with time being set using an ntp server and updated daily the I2C pins are freed up and can be used as general GPIO pins to drive, for instance a buzzer for alarm use. I've tested this and it works fine and doesn't require the complexity of I2S for basic sounds.
+As this application relies on the ESP32-S3s accurate internal RTC with time being set using an ntp server and updated daily the I2C pins are freed up and can be used as general GPIO pins to drive, for instance, a buzzer for alarm use. I've tested this and it works fine and doesn't require the complexity of I2S for basic sounds.
 
 Add web interface to input network parameters. Already done for other projects just needs copying across and customising.
 

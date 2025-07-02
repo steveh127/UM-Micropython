@@ -26,7 +26,7 @@ strongly recommended as basic development tool when working with
 micropython. (_pip install mpremote_)
 
 Navigate to the WOPR directory and with the WOPR connected run the appropriate
-bash build script. (*./builder_S3, builder_S2 or builder_tp*) The build script will need to be 
+bash build script. (*./builder_S3, builder_S2 or builder_tp*). The WOPR can use any of a selection of UMs microcontroller boards, hence the multiple build scripts as pin assignements are different. The build script will need to be 
 set as executable.
 
 ## Setup

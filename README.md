@@ -4,7 +4,9 @@
 
 Generally the provided modules are designed as a basis for further development though some basic applications are provided to demonstrate usage.
 
-I develop applications using Linux and Linux scripts are provided to facilitate installing software. Users of proprietary OSs should be able to copy required files to the devices using mpremote without problems though this is not tested by me. 
+I develop applications using Linux and Linux scripts are provided to facilitate installing software. Users of proprietary OSs should be able to copy required files to the devices using mpremote without problems though this is not tested by me.
+
+The code in this repository is provided on an as-is basis. Fell free to download or clone it and use it as  source of ideas. Currently only the SQUiXL code is being actively developed. 
 
 The devices in historical sequence are:
 

@@ -1,4 +1,6 @@
-﻿# Unexpected Maker - Light Crystals Puzzle clock 
+﻿
+# Unexpected Maker - Light Crystals Kit Puzzle clock
+## *A micropython application* 
 
 ## Introduction
 
