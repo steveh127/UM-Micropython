@@ -11,9 +11,9 @@ joke = Get_Joke()
 async def actions(widget):
 	if widget.name == 'b1':
 		setup,punchline = await joke()
-		scr.rect(370,0,100,480,scr.background,True)
-		scr.write(setup,380, 460, BLUE,rotation=-90,font=serif24B)
-		scr.write(punchline,430, 460, GREEN,rotation=-90,font=serif24B)
+		scr.rect(360,0,120,450,scr.background,True)
+		scr.write_over(setup,360,440, BLUE,rotation=-90,font=serif24B,width=440)
+		scr.write_over(punchline,420, 440, GREEN,rotation=-90,font=serif24B,width=440,background=RED)
 		await asyncio.sleep(0.5)
 		return
 	if widget.name == 'test':

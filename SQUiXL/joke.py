@@ -38,7 +38,7 @@ async def get_jokes():
 	return jokes
 	
 class Get_Joke():
-	def __init__(self):
+	def __init__(self,*, width = 440):
 		self.jokes = None
 		asyncio.run(self.get_more_jokes())
 		self.n = 0
@@ -58,10 +58,10 @@ class Get_Joke():
 			#await self.get_more_jokes()
 		return  joke['setup'],joke['punchline']		
 
-# async def main():
-	# joke = Get_Joke()
-	# for i in range(6):
-		# print(await joke())
-		# print()
+async def main():
+	joke = Get_Joke()
+	for i in range(6):
+		print(await joke())
+		print()
 
-# asyncio.run(main())
+asyncio.run(main())

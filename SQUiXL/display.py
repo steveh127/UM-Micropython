@@ -30,7 +30,7 @@ async def display():
 	
 	clock = SQ_Time(180,10,GREEN,font=sans32)
 	
-	menu = Menu('Test',[('cat','Cat'),('mouse','Mouse'),('dog','Dog')],250,200,GREEN,font=sans32,clicked=RED)
+	menu = Menu('Test',[('cat','Cat'),('mouse','Mouse'),('dog','Dog')],230,200,GREEN,font=sans32,clicked=RED)
 	
 	scr.add_target((0,0,40,40),corner)
 	

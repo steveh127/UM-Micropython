@@ -61,20 +61,42 @@ class _SQUiXL_Text():
 	
 	def circle(self,x,y,radius,colour=WHITE,fill=False):
 		self.fb.ellipse(x,y,radius,radius,colour,fill)
-
-	def write(self,text,x,y,colour,*,rotation=0,font=None,):
+	
+	def wrap(self,text,font,width):
+		if self.get_size(text,font)[0] < width:
+			return text
+		else:
+			wtext = ''
+			wtl = 0
+			text_words = text.split(' ')
+			line = 1
+			for word in text_words:
+				wl = self.get_size(word,font)[0]
+				if len(wtext) > 0:
+					wtl = self.get_size(wtext,font)[0]
+				if (wtl + wl) > (line * width - 10):
+					wtext += '\n' + word + ' '
+					line += 1
+				else:
+					wtext += word + ' '
+		return wtext				
+		
+	def write(self,text,x,y,colour,*,rotation=0,font=None,width=460):
 		if font is None:
 			font = self.font
-		font.write(text,self.fb,framebuf.RGB565, 480, 480, x, y, colour,rot=rotation)
+		text = self.wrap(text,font,width)
+		font.write(text,self.fb,framebuf.RGB565, 480, 480, x, y, colour,rot=rotation)	
 	
-	def write_over(self,text,x,y,colour,*,rotation=0,font=None,background = None):
+	def write_over(self,text,x,y,colour,*,rotation=0,font=None,background=None,width=460):
 		if background is None:
 			back = self.background
 		else:
 			back = background
 		if font is None:
 			font = self.font
+		#any value for back 0 or greater will fill in character background with that colour.
 		font.back = back
+		text = self.wrap(text,font,width)
 		font.write(text,self.fb,framebuf.RGB565, 480, 480, x, y, colour,rot=rotation)
 		font.back = -1
 	
